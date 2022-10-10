@@ -1,4 +1,4 @@
-0<?php
+<?php
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;

@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Livewire\Shop\IndexComponent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', IndexComponent::class);
 
 Auth::routes();
 
