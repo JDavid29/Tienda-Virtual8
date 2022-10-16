@@ -18,6 +18,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    {{-- Estilos de (cdn font awesome) --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.min.css"/>
     <!-- agregamos los estilos de livewire -->
     @livewireStyles
 </head>
@@ -40,6 +42,7 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">
+
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
@@ -54,6 +57,13 @@
                                 </li>
                             @endif
                         @else
+                            {{--  ICONO DE CARRITO DE COMPRAS --}}
+                            <li class="nav-item">
+                            {{-- incluimos el componente para el icono cart --}}
+                            @livewire('shop.cart-component')
+                            {{-- <i class="fas fa-shopping-cart"></i> --}}  {{-- <a class="nav-link" href="">Carrito</a> --}}
+                            {{-- {{ \Cart::session(auth()->id())->getContent()->count() }} --}} {{-- contamos los productos en el carrito --}}
+                            </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
