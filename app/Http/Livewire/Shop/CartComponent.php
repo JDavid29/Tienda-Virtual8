@@ -8,7 +8,7 @@ class CartComponent extends Component
 {
     public $cart;
 
-    protected $listeners = ['add_to_cart'];
+    protected $listeners = ['addToCart'];
 
     public function addToCart(){}
 

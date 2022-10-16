@@ -15,7 +15,7 @@ class IndexComponent extends Component
         ->section('content');
     }
 
-    public function add_to_cart(Producto $producto){
+    public function addToCart(Producto $producto){
         // dd($producto); //observacion pendiente por los datos a mirar al presionar button
 
         // add the product to cart
@@ -29,6 +29,6 @@ class IndexComponent extends Component
         ));
 
         $this->emit('message', 'El Producto se ha agregado correctamente.');
-        $this->emitTo('shop.cart-component','add_to_cart');
+        $this->emitTo('shop.cart-component','addToCart');
     }
 }
