@@ -3,7 +3,7 @@
     <div class="container">
         <div class="row">
             @foreach($productos as $producto)
-            <div class="cold-md-4">
+            <div class="col-md-4">
                 <div class="card">
                     <img class="card-img-top" src="{{ asset('image_default.png')
                     }}" alt="Card image cap">
@@ -14,7 +14,7 @@
                     <div class="card-body">
 
                         <button type="button" class="btn btn-primary"
-                        wire:click="add_to_cart({{ $producto->id }})"
+                        wire:click="addToCart({{ $producto->id }})"
                         >Agregar al carrito</button>
 
                         <!-- <a href="#" class="card-link">Another link</a> -->

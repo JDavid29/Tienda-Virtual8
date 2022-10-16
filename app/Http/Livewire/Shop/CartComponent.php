@@ -10,7 +10,7 @@ class CartComponent extends Component
 
     protected $listeners = ['add_to_cart'];
 
-    public function add_to_cart(){}
+    public function addToCart(){}
 
     public function render()
     {
