@@ -9,7 +9,7 @@ class IndexComponent extends Component
 {
     public function render()
     {
-        $productos = Producto::all();
+        $productos = Producto::paginate(9);
         return view('livewire.shop.index-component', compact('productos'))
         ->extends('layouts.app')
         ->section('content');
