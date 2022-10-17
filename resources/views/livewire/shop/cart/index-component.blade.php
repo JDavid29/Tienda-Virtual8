@@ -34,5 +34,6 @@
             </tbody>
         </table>
         <h3>Total: BOB {{ \Cart::session(auth()->id())->getTotal() }}</h3>
+        <a href="{{ route('checkout') }}" class="btn btn-primary">Pagar</a>
     </div>
 </div>
