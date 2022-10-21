@@ -29,3 +29,8 @@ Route::get('/cart', CartIndexComponent::class)->name('cart');
 
 Route::get('/checkout', CheckoutComponent::class)->name('checkout');
 
+Route::get('/paypal-success/{order}', [PaypalCheckout::class,
+'getExpressCheckoutSuccess'])->name('paypal.success');
+Route::get('/paypal-cancel', [CheckoutComponent::class, 'calcelPage'])
+->name('paypal.cancel');
+

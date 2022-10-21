@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->enum('status', ['pending','processing', 'completed','declined'])
             ->default('pending');
             $table->integer('item_count');
-            $table->boolean('ispad')->default(false); //para saber si el product esta pagado
+            $table->boolean('is_paid')->default(false); //para saber si el product esta pagado
             $table->enum('payment_method', ['cash_on_delivery','paypal', 'stripe','cart'])
             ->default('cash_on_delivery');
 
@@ -39,6 +39,8 @@ class CreateOrdersTable extends Migration
             $table->string('billing_state');
             $table->string('billing_zipcode');
             $table->string('billing_phone');
+
+            $table->float('total');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

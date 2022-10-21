@@ -66,6 +66,22 @@
                 </span>
             @enderror
         </div>
+
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+            wire:model="payment_method";
+            name="exampleRadios" id="exampleRadios1" value="cash_on_delivery" checked>
+            <label class="form-check-label" for="exampleRadios1">
+            cash_on_delivery</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio"
+            wire:model="payment_method"
+            name="exampleRadios" value="paypal" id="exampleRadios2">
+            <label class="form-check-label" for="exampleRadios2">
+            Paypal</label>
+        </div>
+
         <button type="button"
         wire:click="make_order()"
         class="btn btn-primary">Realizar pedido</button>
