@@ -3,9 +3,10 @@
 namespace App\Http\Livewire\Shop;
 
 use App\Models\Order;
-//use App\PaypalCheckout;
-use Livewire\Component;
+use App\Mail\OrderPaid;
 
+use Livewire\Component;
+use Illuminate\Support\Facades\Mail;
 use Srmklive\PayPal\Services\ExpressCheckout;
 
 class CheckoutComponent extends Component
@@ -16,11 +17,6 @@ class CheckoutComponent extends Component
     $billing_phone;
 
     public $payment_method, $total;
-
-    //private $paypalCheckout;
-    // public function mount(PaypalCheckout $paypalCheckout){
-    //     $this->paypalCheckout = $paypalCheckout;
-    // }
 
     public function render()
     {
@@ -83,44 +79,14 @@ class CheckoutComponent extends Component
         }
 
         if ($this->payment_method == 'paypal') {
-            $this->getExpressCheckout($order->id);
-        } else {
-            //false
-            //$order->is_paid = false
+            return redirect()->route('paypal.checkout', $order->id);
         }
 
-    }
+        Mail::to($order->user->email)->send(new OrderPaid($order));
 
-    public function getExpressCheckout($orderId){
-        $cart = \Cart::session(auth()->id());
-        $cartItems = array_map(function($item){
-            return [
-                'name' => $item['name'],
-                'price' => $item['price'],
-                'qty' => $item['quantity'],
-            ];
-        }, $cart->getContent()->toarray());
+        \Cart::session(auth()->id())->clear(); //limpiamos el product del carito despues de la compra
 
-        $checkoutData = [
-            'items' => $cartItems,
-            'invoice_id' => uniqid(),
-            'invoice_description' => "descripcion de orden",
-            'return_url' => route('paypal.success', $orderId),
-            'cancel_url' => route('paypal.cancel'),
-            'total' => $cart->getTotal(),
-        ];
+        return redirect()->route('shop.index');//->withMessage('Su pedido esta siendo procesado');
 
-        $provider = new ExpressCheckout;
-
-        $response = $provider->setExpressCheckout($checkoutData);
-        return redirect($response['paypal_link']);
-    }
-
-    public function getExpressCheckoutSuccess(Request $request, $orderId){
-        dd($request);
-    }
-
-    public function calcelPage(){
-        dd("cancelado");
     }
 }
