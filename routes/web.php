@@ -38,3 +38,8 @@ Route::get('/paypal-success/{order}', [PaypalController::class,
 Route::get('/paypal-cancel', [PaypalController::class, 'calcelPage'])
 ->name('paypal.cancel');
 
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
