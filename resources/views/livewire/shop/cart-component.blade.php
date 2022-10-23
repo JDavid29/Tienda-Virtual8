@@ -1,6 +1,7 @@
 <div>
+     {{-- para el icono se uso la version 5.0.0 --}}
     <a href="{{ route('cart') }}" class="btn btn-primary">
-        <i class="fas fa-shopping-cart"></i> {{-- para el icono se uso la version 5.0.0 --}}
+        <i class="fas fa-shopping-cart"></i>
     </a>
     {{-- Validacion al agregar productos al carrito. Posible modificacion --}}
     {{-- @auth
