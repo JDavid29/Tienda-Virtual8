@@ -21,7 +21,7 @@ class CreateOrdersTable extends Migration
             ->default('pending');
             $table->integer('item_count');
             $table->boolean('is_paid')->default(false); //para saber si el product esta pagado
-            $table->enum('payment_method', ['cash_on_delivery','paypal', 'stripe','cart'])
+            $table->enum('payment_method', ['cash_on_delivery','paypal', 'stripe','card'])
             ->default('cash_on_delivery');
 
             $table->string('shipping_fullname');

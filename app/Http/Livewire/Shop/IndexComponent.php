@@ -4,9 +4,13 @@ namespace App\Http\Livewire\Shop;
 
 use App\Models\Producto;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class IndexComponent extends Component
 {
+    use WithPagination; //paginacion con livewire y boostrap
+    protected $paginationTheme = 'bootstrap';
+
     public function render()
     {
         $productos = Producto::paginate(9);

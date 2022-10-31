@@ -4,7 +4,6 @@ namespace App\Http\Livewire\Shop;
 
 use App\Models\Order;
 use App\Mail\OrderPaid;
-
 use Livewire\Component;
 use Illuminate\Support\Facades\Mail;
 use Srmklive\PayPal\Services\ExpressCheckout;

@@ -1,0 +1,40 @@
+{
+    "options" : {
+        "cash_on_delivery": "cash_on_delivery",
+        "paypal": "Paypal",
+        "stripe": "stripe",
+        "card": "card"
+    }
+}
+
+{
+    "on" : "Pagado",
+    "off" : "No pagado",
+    "checked" : true
+}
+
+{
+    "options" : {
+        "pending": "pending",
+        "processing": "processing",
+        "completed": "completed",
+        "declined": "declined"
+    }
+}
+
+{
+    "options" : {
+        "cash_on_delivery": "Pago en efectivo",
+        "paypal": "Paypal",
+        "stripe": "Stripe",
+        "card": "Tarjeta"
+    }
+}
+{
+    "options" : {
+        "pending": "Pendiente",
+        "processing": "Procesando",
+        "completed": "Completado",
+        "declined": "Rechazado"
+    }
+}
