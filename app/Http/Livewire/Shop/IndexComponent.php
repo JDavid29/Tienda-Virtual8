@@ -2,13 +2,13 @@
 
 namespace App\Http\Livewire\Shop;
 
-use App\Models\Producto;
 use Livewire\Component;
+use App\Models\Producto;
 use Livewire\WithPagination;
 
 class IndexComponent extends Component
 {
-    use WithPagination; //paginacion con livewire y boostrap
+    use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
     public function render()
@@ -34,5 +34,6 @@ class IndexComponent extends Component
 
         $this->emit('message', 'El Producto se ha agregado correctamente.');
         $this->emitTo('shop.cart-component','addToCart');
+
     }
 }
