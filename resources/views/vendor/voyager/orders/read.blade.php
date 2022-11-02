@@ -156,7 +156,7 @@
                             <tbody>
                                 @foreach ($dataTypeContent->items as $item)
                                 <tr>
-                                    <td>{{ $item->nombre }}</td>
+                                    <td>{{ $item->nombre }}</td> <!--el elemento name esta en español-->
                                     <td>{{ $item->pivot->quantity }}</td>
                                     <td>{{ $item->pivot->price }}</td>
                                 </tr>
