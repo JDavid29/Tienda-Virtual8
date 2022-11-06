@@ -43,6 +43,11 @@
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto align-items-center">
 
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register.shop') }}">
+                                Registrar mi tienda</a>
+                        </li>
+
                         <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))

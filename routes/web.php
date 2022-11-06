@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaypalController;
 use App\Http\Livewire\Shop\IndexComponent;
 use App\Http\Livewire\Shop\CheckoutComponent;
+use App\Http\Livewire\Shop\RegisterComponent;
 use App\Http\Livewire\Shop\Cart\IndexComponent as CartIndexComponent;
 
 /*
@@ -38,6 +39,8 @@ Route::get('/paypal-success/{order}', [PaypalController::class,
 Route::get('/paypal-cancel', [PaypalController::class, 'calcelPage'])
 ->name('paypal.cancel');
 
+
+Route::get('/register-shop', RegisterComponent::class)->name('register.shop');
 
 
 Route::group(['prefix' => 'admin'], function () {
