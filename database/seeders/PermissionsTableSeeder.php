@@ -379,6 +379,46 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => '2022-10-31 19:09:21',
                 'updated_at' => '2022-10-31 19:09:21',
             ),
+            45 => 
+            array (
+                'id' => 46,
+                'key' => 'browse_shops',
+                'table_name' => 'shops',
+                'created_at' => '2022-11-06 23:40:41',
+                'updated_at' => '2022-11-06 23:40:41',
+            ),
+            46 => 
+            array (
+                'id' => 47,
+                'key' => 'read_shops',
+                'table_name' => 'shops',
+                'created_at' => '2022-11-06 23:40:41',
+                'updated_at' => '2022-11-06 23:40:41',
+            ),
+            47 => 
+            array (
+                'id' => 48,
+                'key' => 'edit_shops',
+                'table_name' => 'shops',
+                'created_at' => '2022-11-06 23:40:41',
+                'updated_at' => '2022-11-06 23:40:41',
+            ),
+            48 => 
+            array (
+                'id' => 49,
+                'key' => 'add_shops',
+                'table_name' => 'shops',
+                'created_at' => '2022-11-06 23:40:41',
+                'updated_at' => '2022-11-06 23:40:41',
+            ),
+            49 => 
+            array (
+                'id' => 50,
+                'key' => 'delete_shops',
+                'table_name' => 'shops',
+                'created_at' => '2022-11-06 23:40:41',
+                'updated_at' => '2022-11-06 23:40:41',
+            ),
         ));
         
         

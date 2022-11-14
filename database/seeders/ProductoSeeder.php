@@ -16,6 +16,13 @@ class ProductoSeeder extends Seeder
     public function run()
     {
         //con este seeder podemos decir que cantidad de productos vamos a crear
-        Producto::factory()->count(20)->create();
+        Producto::factory()->count(20)->create([
+            'shop_id' => 1,
+        ]);
+
+        Producto::factory()->count(15)->create([
+            'shop_id' => 2,
+        ]);
+        // antes de realizar las migraciones y cambios, guardar todos esos cambio en voyager
     }
 }

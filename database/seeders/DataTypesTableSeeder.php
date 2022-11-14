@@ -145,6 +145,24 @@ class DataTypesTableSeeder extends Seeder
                 'created_at' => '2022-10-31 19:09:21',
                 'updated_at' => '2022-11-01 19:58:10',
             ),
+            7 => 
+            array (
+                'id' => 9,
+                'name' => 'shops',
+                'slug' => 'shops',
+                'display_name_singular' => 'Shop',
+                'display_name_plural' => 'Shops',
+                'icon' => 'voyager-shop',
+                'model_name' => 'App\\Models\\Shop',
+                'policy_name' => 'App\\Policies\\ShopPolicy',
+                'controller' => 'App\\Http\\Controllers\\Admin\\ShopController',
+                'description' => NULL,
+                'generate_permissions' => 1,
+                'server_side' => 0,
+                'details' => '{"order_column":null,"order_display_column":null,"order_direction":"asc","default_search_key":null,"scope":null}',
+                'created_at' => '2022-11-06 23:40:41',
+                'updated_at' => '2022-11-09 01:39:18',
+            ),
         ));
         
         

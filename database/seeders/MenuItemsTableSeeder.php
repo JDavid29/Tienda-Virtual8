@@ -243,6 +243,22 @@ class MenuItemsTableSeeder extends Seeder
                 'route' => 'voyager.orders.index',
                 'parameters' => NULL,
             ),
+            14 => 
+            array (
+                'id' => 15,
+                'menu_id' => 1,
+                'title' => 'Shops',
+                'url' => '',
+                'target' => '_self',
+                'icon_class' => 'voyager-shop',
+                'color' => NULL,
+                'parent_id' => NULL,
+                'order' => 16,
+                'created_at' => '2022-11-06 23:40:41',
+                'updated_at' => '2022-11-06 23:40:41',
+                'route' => 'voyager.shops.index',
+                'parameters' => NULL,
+            ),
         ));
         
         

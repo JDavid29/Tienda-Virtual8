@@ -21,6 +21,10 @@ class CreateProductosTable extends Migration
             $table->float('precio');
             $table->string('cover_img')->nullable();
 
+            // los productos van a tener una llave foranea hacia tienda
+            $table->unsignedBigInteger('shop_id')->nullable();
+            $table->foreign('shop_id')->references('id')->on('shops')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
