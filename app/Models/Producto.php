@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Shop;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Producto extends Model
 {
@@ -16,4 +17,8 @@ class Producto extends Model
         'cover_img',
         'shop_id',
     ];
+
+    public function shop(){
+        return $this->belongsTo(Shop::class, 'shop_id');
+    }
 }

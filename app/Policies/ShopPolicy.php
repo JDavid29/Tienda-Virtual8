@@ -10,7 +10,7 @@ class ShopPolicy
 {
     use HandlesAuthorization;
 
-    // Permisos Admin al policy de la tiendas con diferentes items
+    // Permisos Admin al policy de la tiendas con diferentes items para la seguridad
     public function before(User $user, $ability)
     {
         if ($user->hasRole('admin')) {
