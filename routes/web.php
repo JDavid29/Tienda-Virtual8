@@ -21,7 +21,12 @@ use App\Http\Livewire\Shop\Cart\IndexComponent as CartIndexComponent;
 //     return view('welcome');
 // });
 
-Route::get('/', IndexComponent::class)->name('shop.index');
+// Route::get('/', IndexComponent::class)->name('shop.index');
+// Ruta base del proyeto
+// Renderizamos una vista
+Route::get('/', function () {
+    return view('front.index');
+});
 
 Auth::routes();
 
