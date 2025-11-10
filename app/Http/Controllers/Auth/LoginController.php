@@ -33,6 +33,18 @@ class LoginController extends Controller
      *
      * @return void
      */
+
+    //Metodo para redireccionar a la vista admin ERROR
+    //protected function redirectTo()
+    //{
+        //if (auth()->user()->roles->first()->name == 'Admin') {
+        //    return '/home';
+        //}else if (auth()->user()->roles->first()->name == 'Estudiante') {
+        //    return '/dashboard';
+        //}
+        //return $redirectTo;
+    //}
+
     public function __construct()
     {
         $this->middleware('guest')->except('logout');

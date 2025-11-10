@@ -177,6 +177,8 @@ return [
 
         Srmklive\PayPal\Providers\PayPalServiceProvider::class,
 
+        Darryldecode\Cart\CartServiceProvider::class,
+
     ],
 
     /*
@@ -233,6 +235,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
 
         'PayPal' => Srmklive\PayPal\Facades\PayPal::class,
+
+         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
 
     ],
 

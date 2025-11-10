@@ -17,10 +17,11 @@ class ProductoFactory extends Factory
     public function definition()
     {
         return [
+            'category_id' => rand(1, 2),
             'nombre'=> $this->faker->sentence(2),
             'descripcion' => $this->faker->sentence(20),
             'precio' => $this->faker->numberBetween(100, 2000),
-            
+
         ];
     }
 }

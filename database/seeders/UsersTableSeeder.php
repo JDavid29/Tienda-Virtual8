@@ -14,12 +14,12 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-
+        
 
         \DB::table('users')->delete();
-
+        
         \DB::table('users')->insert(array (
-            0 =>
+            0 => 
             array (
                 'id' => 1,
                 'role_id' => 2,
@@ -33,7 +33,7 @@ class UsersTableSeeder extends Seeder
                 'created_at' => '2022-10-20 13:52:30',
                 'updated_at' => '2022-10-20 13:52:30',
             ),
-            1 =>
+            1 => 
             array (
                 'id' => 2,
                 'role_id' => 2,
@@ -47,7 +47,7 @@ class UsersTableSeeder extends Seeder
                 'created_at' => '2022-10-20 18:21:14',
                 'updated_at' => '2022-10-20 18:21:14',
             ),
-            2 =>
+            2 => 
             array (
                 'id' => 3,
                 'role_id' => 1,
@@ -61,7 +61,7 @@ class UsersTableSeeder extends Seeder
                 'created_at' => '2022-10-22 22:51:11',
                 'updated_at' => '2022-10-22 22:55:51',
             ),
-            3 =>
+            3 => 
             array (
                 'id' => 4,
                 'role_id' => 3,
@@ -75,7 +75,7 @@ class UsersTableSeeder extends Seeder
                 'created_at' => '2022-11-06 14:39:17',
                 'updated_at' => '2022-11-07 01:00:41',
             ),
-            4 =>
+            4 => 
             array (
                 'id' => 5,
                 'role_id' => 3,
@@ -90,7 +90,7 @@ class UsersTableSeeder extends Seeder
                 'updated_at' => '2022-11-09 01:14:55',
             ),
         ));
-
-
+        
+        
     }
 }

@@ -19,21 +19,35 @@ class IndexComponent extends Component
         ->section('content');
     }
 
-    public function addToCart(Producto $producto){
-        // dd($producto); //observacion pendiente por los datos a mirar al presionar button
+    public function addToCart($productoId)
+{
+    try {
+        $producto = Producto::find($productoId);
 
-        // add the product to cart
-        \Cart::session(auth()->id())->add(array(
-        'id' => $producto->id,
-        'name' => $producto->nombre,
-        'price' => $producto->precio,
-        'quantity' => 1,
-        'attributes' => array(),
-        'associatedModel' => $producto
-        ));
+        if (!$producto) {
+            session()->flash('error', 'Producto no encontrado');
+            return;
+        }
 
-        $this->emit('message', 'El Producto se ha agregado correctamente.');
-        $this->emitTo('shop.cart-component','addToCart');
+        // Agregar al carrito
+        \Cart::add([
+            'id' => $producto->id,
+            'name' => $producto->nombre,
+            'price' => $producto->precio,
+            'quantity' => 1,
+            'attributes' => [
+                'cover_img' => $producto->cover_img ?? 'default.jpg',
+            ]
+        ]);
 
+        // Emitir eventos para actualizar el toolbar
+        $this->emit('productAdded');
+        $this->emitTo('toolbar-component', 'cartUpdated');
+
+        session()->flash('success', 'Producto agregado al carrito');
+
+    } catch (\Exception $e) {
+        session()->flash('error', 'Error al agregar producto: ' . $e->getMessage());
     }
+}
 }
