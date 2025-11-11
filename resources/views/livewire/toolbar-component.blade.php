@@ -157,7 +157,7 @@
                                     </ul>
                                     <p class="minicart-total">SUBTOTAL: <span>Bs. {{ number_format($cartSubTotal, 2) }}</span></p>
                                     <div class="minicart-button">
-                                        <a href="checkout.html" class="li-button li-button-dark li-button-fullwidth li-button-sm">
+                                        <a href="/cart" class="li-button li-button-dark li-button-fullwidth li-button-sm">
                                             <span>VER CARRITO COMPLETO</span>
                                         </a>
                                         <a href="checkout.html" class="li-button li-button-fullwidth li-button-sm">

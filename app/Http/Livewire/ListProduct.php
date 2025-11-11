@@ -26,7 +26,7 @@ class ListProduct extends Component
         $producto = Producto::find($productoId);
 
         if ($producto) {
-            \Cart::add(array(
+            \Cart::session(auth()->id())->add(array(
                 'id' => $producto->id,
                 'name' => $producto->nombre,
                 'price' => $producto->precio,
@@ -34,6 +34,7 @@ class ListProduct extends Component
                 'attributes' => array(),
                 'associatedModel' => $producto
             ));
+
 
             /*$this->dispatchBrowserEvent('cart-debug', [
             'items' => \Cart::getContent()->toArray(),

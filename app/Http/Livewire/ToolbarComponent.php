@@ -25,10 +25,10 @@ class ToolbarComponent extends Component
             if (class_exists('\\Cart') && app()->has('cart')) {
                 $cart = app('cart');
 
-                $this->cartItems = $cart->getContent()->toArray();
-                $this->cartSubTotal = $cart->getSubTotal();
-                $this->cartIsEmpty = $cart->isEmpty();
-                $this->cartTotalQuantity = $cart->getTotalQuantity();
+                $this->cartItems = $cart->session(auth()->id())->getContent()->toArray();
+                $this->cartSubTotal = $cart->session(auth()->id())->getSubTotal();
+                $this->cartIsEmpty = $cart->session(auth()->id())->isEmpty();
+                $this->cartTotalQuantity = $cart->session(auth()->id())->getTotalQuantity();
             } else {
                 // Si Cart no está disponible, usar valores por defecto
                 $this->setDefaultCartValues();

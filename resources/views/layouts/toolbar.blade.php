@@ -57,9 +57,11 @@
             {{-- TOOLBAR --> BARRA DE HERRAMIENTAS --}}
             @livewire('toolbar-component')
             {{-- FIN TOOLBAR --}}
+
             {{-- MENU PRINCIPAL --}}
-            @include("layouts.menu-main")
+            {{-- @include("layouts.menu-main") --}}
             {{-- FIN MENU PRINCIPAL --}}
+
         </header>
         <!-- Header Area End Here -->
         <!-- Begin Slider With Banner Area -->
