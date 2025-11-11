@@ -39,6 +39,7 @@ class ListProduct extends Component
             'items' => \Cart::getContent()->toArray(),
             'total' => \Cart::getTotal(),
             ]);*/
+            $this->emit('productAdded');
 
             session()->flash('message', 'Producto agregado al carrito exitosamente.');
         } else {
