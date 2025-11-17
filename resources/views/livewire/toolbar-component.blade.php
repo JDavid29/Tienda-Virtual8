@@ -82,7 +82,7 @@
                 <div class="col-lg-3">
                     <div class="logo pb-sm-30 pb-xs-30">
                         <a href="index.html">
-                            <img src="images/menu/logo/2.jpg" alt="">
+                            <img src="images/menu/logo/2.JPG" alt="">
                         </a>
                     </div>
                 </div>
@@ -186,14 +186,24 @@
                     <div class="hb-menu">
                         <nav>
                             <ul>
-                                <li class="dropdown-holder"><a href="index.html">Categorias</a>
-                                    <ul class="hb-dropdown">
+                                {{-- inicio de la tienda en la barra de herramientas --}}
+                                <li><a href="/shop">Inicio</a></li> {{-- ✅ URL directa --}}
+                                {{-- fin de la tienda en la barra de herramientas --}}
+
+                                {{-- Hogar
+                                <li class="dropdown-holder"><a href="index.html">Home</a>
+                                    {{-- <ul class="hb-dropdown">
                                         <li><a href="#">Accesorios</a></li>
                                         <li><a href="#">SmartWatches</a></li>
                                         <li><a href="index-3.html">Portatiles</a></li>
                                         <li class="active"><a href="index-4.html">General</a></li>
                                     </ul>
-                                </li>
+                                </li> --}}
+
+                                {{-- Ofertas del dia --}}
+                                {{-- <li><a href="shop-left-sidebar.html">Ofertas del día</a></li> --}}
+                                {{-- Fin Ofertas del dia --}}
+
                                 <li class="megamenu-holder"><a href="shop-left-sidebar.html">Comercio</a>
                                     <ul class="megamenu hb-megamenu">
                                         <li><a href="shop-left-sidebar.html">Shop Page Layout</a>
@@ -240,6 +250,9 @@
                                 <li><a href="contact.html">Contacto</a></li>
                                 <li><a href="shop-left-sidebar.html">Reloj inteligente</a></li>
                                 <li><a href="shop-left-sidebar.html">Accesorios</a></li>
+                                {{-- Servicio al Cliente --}}
+                                <li><a href="faq.html">Servicio al Cliente</a></li>
+                                {{-- Fin Servicio al Cliente --}}
                             </ul>
                         </nav>
                     </div>

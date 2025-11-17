@@ -53,6 +53,7 @@
     <!-- Begin Body Wrapper -->
     <div class="body-wrapper">
         <!-- Begin Header Area -->
+        {{-- HEADER ---> Encabezamiento --}}
         <header class="li-header-4">
             {{-- TOOLBAR --> BARRA DE HERRAMIENTAS --}}
             @livewire('toolbar-component')
@@ -66,7 +67,7 @@
         <!-- Header Area End Here -->
         <!-- Begin Slider With Banner Area -->
 
-        <!-- Slider With Banner Area End Here -->
+        <!-- Slider With Banner Area End Here | El carrusel con área de banner termina aquí. -->
         <!-- Begin Static Top Area -->
         <div class="static-top-wrap">
             <div class="container">
@@ -74,7 +75,7 @@
                     <div class="col-lg-12">
                         <div class="static-top-content mt-sm-30">
                             Regalo especial: Obsequio todos los días los fines de semana - Nuevo código de cupón "
-                            <span>LimupaSaleoff"</span>
+                            <span>NextSaleOff"</span>
                         </div>
                     </div>
                 </div>

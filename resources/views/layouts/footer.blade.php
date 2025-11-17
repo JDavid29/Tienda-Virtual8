@@ -74,24 +74,25 @@
                             <!-- Begin Footer Logo Area -->
                             <div class="col-lg-4 col-md-6">
                                 <div class="footer-logo">
-                                    <img src="images/menu/logo/1.jpg" alt="Footer Logo">
+                                    <a href="https://www.uajms.edu.bo/firnt/" target="_blank">
+                                        <img src="images/menu/logo/3.png" alt="Footer Logo" alt="50" height="100">
+                                    </a>
                                     <p class="info">
-                                        Somos un equipo de diseñadores y desarrolladores que crean plantillas HTML de
-                                        alta calidad y Woocommerce, Shopify Theme.
+                                    La Universidad Autónoma Juan Misael Saracho es una universidad pública boliviana. La universidad fue nombrada en honor al periodista y político boliviano Juan Misael Saracho.
                                     </p>
                                 </div>
                                 <ul class="des">
                                     <li>
                                         <span>DIRECCIÓN: </span>
-                                        6688Barrio Juan XXIII, Yacuiba, Gran Chaco, Tarija, Bolivia
+                                        Ruta 9, Campus Universitario, Zona Limitas,Yacuiba, Tarija, Bolivia
                                     </li>
                                     <li>
                                         <span>TELÉFONO: </span>
-                                        <a href="#">(+123) 123 321 345</a>
+                                        <a href="#">(+591) 68705577</a>
                                     </li>
                                     <li>
                                         <span>CORREO ELECTRÓNICO: </span>
-                                        <a href="mailto://info@yourdomain.com">info@yourdomain.com</a>
+                                        <a href="mailto://rector@uajms.edu.bo">rector@uajms.edu.bo Tarija – Bolivia</a>
                                     </li>
                                 </ul>
                             </div>

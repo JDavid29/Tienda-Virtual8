@@ -31,7 +31,9 @@ class ListProduct extends Component
                 'name' => $producto->nombre,
                 'price' => $producto->precio,
                 'quantity' => 1,
-                'attributes' => array(),
+                'attributes' => array([
+                    'image' => $producto->cover_img, // campo imagen de la tabla productos
+                ]),
                 'associatedModel' => $producto
             ));
 
