@@ -11,6 +11,7 @@ use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class IndexComponent extends Component
 {
+    // PARTE DEL CARRITO DE COMPRAS CON LIVEWIRE
     public $cartItems = [];
     public $couponCode = '';
     public $discount = 0;

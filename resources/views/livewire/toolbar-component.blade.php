@@ -17,38 +17,38 @@
                     <div class="header-top-right">
                         <ul class="ht-menu">
                             @guest
-<li>
-    <a class="" href="/admin/login"><span>Iniciar Sesión</span></a> {{-- ✅ URL directa --}}
-</li>
-<li>
-    <a class="" href="/admin/login"><span>Registrarse</span></a> {{-- ✅ URL directa --}}
-</li>
-@else
-    <li>
-        <div class="ht-setting-trigger"><span>{{ Auth::user()->name }}</span></div>
-        <div class="setting ht-setting">
-            <ul class="ht-setting-list">
-                <li>
-                    <a class="nav-link" href="{{ route('voyager.logout') }}"
-                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        Logout
-                    </a>
-                </li>
-                <form id="logout-form" action="{{ route('voyager.logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
-            </ul>
-        </div>
-    </li>
-@endguest
+                            <li>
+                                <a class="" href="/admin/login"><span>Iniciar Sesión</span></a> {{-- ✅ URL directa --}}
+                            </li>
+                            <li>
+                                <a class="" href="/admin/login"><span>Registrarse</span></a> {{-- ✅ URL directa --}}
+                            </li>
+                            @else
+                                <li>
+                                    <div class="ht-setting-trigger"><span>{{ Auth::user()->name }}</span></div>
+                                    <div class="setting ht-setting">
+                                        <ul class="ht-setting-list">
+                                            <li>
+                                                <a class="nav-link" href="{{ route('voyager.logout') }}"
+                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                    Logout
+                                                </a>
+                                            </li>
+                                            <form id="logout-form" action="{{ route('voyager.logout') }}" method="POST" class="d-none">
+                                                @csrf
+                                            </form>
+                                        </ul>
+                                    </div>
+                                </li>
+                            @endguest
                             <!-- Begin Currency Area -->
                             <li>
                                 <span class="currency-selector-wrapper">Divisa :</span>
-                                <div class="ht-currency-trigger"><span>USD $</span></div>
+                                <div class="ht-currency-trigger"><span>BOB Bs</span></div>
                                 <div class="currency ht-currency">
                                     <ul class="ht-setting-list">
-                                        <li><a href="#">BOB Bs</a></li>
-                                        <li class="active"><a href="#">USD $</a></li>
+                                        <li class="active"><a href="#">BOB Bs</a></li>
+                                        <li><a href="#">USD $</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -56,11 +56,11 @@
                             <!-- Begin Language Area -->
                             <li>
                                 <span class="language-selector-wrapper">Idioma :</span>
-                                <div class="ht-language-trigger"><span>Inglés</span></div>
+                                <div class="ht-language-trigger"><span>Español</span></div>
                                 <div class="language ht-language">
                                     <ul class="ht-setting-list">
-                                        <li><a href="#"><img src="images/menu/flag-icon/1.jpg" alt="">Inglés</a></li>
                                         <li class="active"><a href="#"><img src="images/menu/flag-icon/3.jpg" alt="">Español</a></li>
+                                        <li><a href="#"><img src="images/menu/flag-icon/1.jpg" alt="">Inglés</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -112,7 +112,7 @@
                         <ul class="hm-menu">
                             <!-- Begin Header Middle Wishlist Area -->
                             <li class="hm-wishlist">
-                                <a href="wishlist.html">
+                                <a href="{{ route('wishlist') }}">
                                     <span class="cart-item-count wishlist-item-count">0</span>
                                     <i class="fa fa-heart-o"></i>
                                 </a>
@@ -187,7 +187,7 @@
                         <nav>
                             <ul>
                                 {{-- inicio de la tienda en la barra de herramientas --}}
-                                <li><a href="/shop">Inicio</a></li> {{-- ✅ URL directa --}}
+                                <li><a href="{{ route('inicio') }}">Todo</a></li>
                                 {{-- fin de la tienda en la barra de herramientas --}}
 
                                 {{-- Hogar
@@ -204,7 +204,7 @@
                                 {{-- <li><a href="shop-left-sidebar.html">Ofertas del día</a></li> --}}
                                 {{-- Fin Ofertas del dia --}}
 
-                                <li class="megamenu-holder"><a href="shop-left-sidebar.html">Comercio</a>
+                                <li class="megamenu-holder"><a href="{{ route('shopleftsidebar') }}">Comercio</a>
                                     <ul class="megamenu hb-megamenu">
                                         <li><a href="shop-left-sidebar.html">Shop Page Layout</a>
                                             <ul>
@@ -219,7 +219,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-holder"><a href="blog-left-sidebar.html">Blog</a>
+                                <li class="dropdown-holder"><a href="{{ route('blogleftsidebar') }}">Blog</a>
                                     <ul class="hb-dropdown">
                                         <li class="sub-dropdown-holder"><a href="blog-left-sidebar.html">Blog Grid View</a>
                                             <ul class="hb-dropdown hb-sub-dropdown">
@@ -231,7 +231,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="megamenu-static-holder"><a href="index.html">Paginas</a>
+                                <li class="megamenu-static-holder"><a href="{{ route('compare') }}">Comparar</a>
                                     <ul class="megamenu hb-megamenu">
                                         <li><a href="blog-left-sidebar.html">Blog Layouts</a>
                                             <ul>
@@ -246,12 +246,12 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li><a href="about-us.html">Sobre Nosotros</a></li>
-                                <li><a href="contact.html">Contacto</a></li>
-                                <li><a href="shop-left-sidebar.html">Reloj inteligente</a></li>
-                                <li><a href="shop-left-sidebar.html">Accesorios</a></li>
+                                <li><a href="{{ route('about-us') }}">Sobre Nosotros</a></li>
+                                <li><a href="{{ route('contacto') }}">Contacto</a></li>
+                                <li><a href="{{ route('shop3column') }}">Reloj inteligente</a></li>
+                                <li><a href="{{ route('shop4column') }}">Accesorios</a></li>
                                 {{-- Servicio al Cliente --}}
-                                <li><a href="faq.html">Servicio al Cliente</a></li>
+                                <li><a href="{{ route('faq') }}">Centro de ayuda</a></li>
                                 {{-- Fin Servicio al Cliente --}}
                             </ul>
                         </nav>

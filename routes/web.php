@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Livewire\Wishlist;
 use App\Http\Livewire\Admin\Login;
 use App\Http\Livewire\ListProduct;
 use App\Http\Livewire\HomeComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaypalController;
 use App\Http\Livewire\Shop\IndexComponent;
+use App\Http\Controllers\ContactController;
 use App\Http\Livewire\Shop\CheckoutComponent;
 use App\Http\Livewire\Shop\RegisterComponent;
 use App\Http\Controllers\Admin\LoginController;
@@ -24,6 +26,9 @@ use App\Http\Livewire\Shop\Cart\IndexComponent as CartIndexComponent;
 
 // RUTAS PÚBLICAS
 Route::get('/', HomeComponent::class)->name('home');
+
+// Ruta alternativa para "Inicio"
+Route::get('/inicio', HomeComponent::class)->name('inicio');
 
 // Ruta de tienda
 Route::get('/shop', IndexComponent::class)->name('shop.index');
@@ -46,6 +51,7 @@ Route::get('/register', function () {
     return view('auth.register-client');
 })->name('register');
 
+// RUTA DE LOGIN CLIENTE
 Route::get('/login-client', function () {
     return view('auth.login-client');
 })->name('login.client');
@@ -67,14 +73,67 @@ Route::get('/paypal-cancel', [PaypalController::class, 'calcelPage'])
 // RUTA DE REGISTRO DE TIENDA
 Route::get('/register-shop', RegisterComponent::class)->name('register.shop');
 
+// Rutas de los comercios con barra lateral izquierda
+Route::get('/shopleftsidebar', function () {
+    return view('Shop.ShopLeftSidebar');
+})->name('shopleftsidebar');
+
+Route::get('/blogleftsidebar', function () {
+    return view('blog.blogleftsidebar');
+})->name('blogleftsidebar');
+
+// Ruta de la página de comparar
+Route::get('/compare', function () {
+    return view('compare.Compare');
+})->name('compare');
+
 // RUTAS PÁGINAS ESTÁTICAS
 Route::get('/about', function () {
     return view('about');
 })->name('about');
 
+// About Us (Livewire)
+//Route::get('/about-us', \App\Http\Livewire\AboutUs::class)->name('about-us');
+Route::get('/about-us', function () {
+    return view('about.about-us');
+})->name('about-us');
+
+// RUTA: Wishlist
+// URL pública: /wishlist
+// Componente Livewire: App\Http\Livewire\Wishlist (alias: 'wishlist')
+// Vista pública: resources/views/wishlist/index.blade.php (extiende layouts.toolbar)
+// Vista Livewire: resources/views/livewire/wishlist.blade.php (plantilla que renderiza el componente)
+// Nota: puedes llamar al componente desde cualquier Blade con: @livewire('wishlist')
+Route::get('/wishlist', function(){
+    return view('wishlist.index');
+})->name('wishlist');
+
+// RUTA PARA CONTACTO
+//esta ruta se esta obviando en favor de la ruta con controlador y metodo store para soporte post
+Route::get('/contacto', function() {
+    return view('contacto.contacto');
+})->name('contacto');
+
+// POST fallback for non-JS form submissions (progressive enhancement)
+Route::post('/contacto', [ContactController::class, 'store'])->name('contacto.submit');
+
 Route::get('/contact', function () {
-    return view('contact');
+    // Usar la vista de contacto existente (en español)
+    return view('contacto.contacto');
 })->name('contact');
+
+// Rutas de comercio electrónico
+Route::get('/shop3column', function(){
+    return view('Shop.Shop3Column');
+})->name('shop3column');
+
+Route::get('/shop4column', function(){
+    return view('Shop.Shop4Column');
+})->name('shop4column');
+
+Route::get('/faq', function(){
+    return view('Faq.faq');
+})->name('faq');
 
 // RUTAS DE CATEGORÍAS
 Route::get('/category/portatiles', function () {
@@ -105,7 +164,12 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('voyager.logout');
 });
 
-// RUTA FALLBACK TEMPORAL
+// RUTA FALLBACK: devolver la vista 404 con código HTTP 404
 Route::fallback(function () {
-    return redirect('/');
+    return response()->view('errors.404', [], 404);
 });
+
+//ruta de error 404 personalizada
+Route::get('/404', function () {
+    return view('errors.404');
+})->name('error.404');

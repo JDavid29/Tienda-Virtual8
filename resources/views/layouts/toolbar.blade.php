@@ -68,20 +68,7 @@
         <!-- Begin Slider With Banner Area -->
 
         <!-- Slider With Banner Area End Here | El carrusel con área de banner termina aquí. -->
-        <!-- Begin Static Top Area -->
-        <div class="static-top-wrap">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="static-top-content mt-sm-30">
-                            Regalo especial: Obsequio todos los días los fines de semana - Nuevo código de cupón "
-                            <span>NextSaleOff"</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Static Top Area End Here -->
+
         <!-- product-area start -->
         <div class="product-area">
             <div class="container">
@@ -269,6 +256,211 @@
     <script src="js/scrollUp.min.js"></script>
     <!-- Main/Activator js -->
     <script src="js/main.js"></script>
+
+    <!-- Google Map -->
+    <!-- NOTE: The Maps API requires billing enabled for full functionality. If billing is not enabled the API will return an error (BillingNotEnabledMapError).
+         We load the script with async/defer and protect the initialization with feature checks and try/catch so map failures don't break the whole page. -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=geometry&amp;v=weekly&amp;key=AIzaSyChs2QWiAhnzz0a4OEhzqCXwx_qA9ST_lE"></script>
+
+    <script>
+        // Safe map initialization: guard for missing API or errors so the page doesn't break.
+        window.addEventListener('load', function () {
+            try {
+                // Only attempt to initialize if the API loaded and the map container exists
+                if (!window.google || !google.maps) {
+                    console.warn('Google Maps API not available (billing may be disabled or API blocked).');
+                    return;
+                }
+                // If the map container is not present on the current page, skip initialization
+                var mapElement = document.getElementById('google-map');
+                if (!mapElement) return;
+
+                // Basic options for a simple Google Map
+                var mapOptions = {
+                    zoom: 12,
+                    scrollwheel: false,
+                    center: new google.maps.LatLng(-22.002372, -63.674233),
+                    styles: [{
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [{
+                                "color": "#e9e9e9"
+                            },
+                            {
+                                "lightness": 17
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "landscape",
+                        "elementType": "geometry",
+                        "stylers": [{
+                                "color": "#f5f5f5"
+                            },
+                            {
+                                "lightness": 20
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "geometry.fill",
+                        "stylers": [{
+                                "color": "#ffffff"
+                            },
+                            {
+                                "lightness": 17
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.highway",
+                        "elementType": "geometry.stroke",
+                        "stylers": [{
+                                "color": "#ffffff"
+                            },
+                            {
+                                "lightness": 29
+                            },
+                            {
+                                "weight": 0.2
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.arterial",
+                        "elementType": "geometry",
+                        "stylers": [{
+                                "color": "#ffffff"
+                            },
+                            {
+                                "lightness": 18
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "road.local",
+                        "elementType": "geometry",
+                        "stylers": [{
+                                "color": "#ffffff"
+                            },
+                            {
+                                "lightness": 16
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi",
+                        "elementType": "geometry",
+                        "stylers": [{
+                                "color": "#f5f5f5"
+                            },
+                            {
+                                "lightness": 21
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "poi.park",
+                        "elementType": "geometry",
+                        "stylers": [{
+                                "color": "#dedede"
+                            },
+                            {
+                                "lightness": 21
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.text.stroke",
+                        "stylers": [{
+                                "visibility": "on"
+                            },
+                            {
+                                "color": "#ffffff"
+                            },
+                            {
+                                "lightness": 16
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.text.fill",
+                        "stylers": [{
+                                "saturation": 36
+                            },
+                            {
+                                "color": "#333333"
+                            },
+                            {
+                                "lightness": 40
+                            }
+                        ]
+                    },
+                    {
+                        "elementType": "labels.icon",
+                        "stylers": [{
+                            "visibility": "off"
+                        }]
+                    },
+                    {
+                        "featureType": "transit",
+                        "elementType": "geometry",
+                        "stylers": [{
+                                "color": "#f2f2f2"
+                            },
+                            {
+                                "lightness": 19
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "administrative",
+                        "elementType": "geometry.fill",
+                        "stylers": [{
+                                "color": "#fefefe"
+                            },
+                            {
+                                "lightness": 20
+                            }
+                        ]
+                    },
+                    {
+                        "featureType": "administrative",
+                        "elementType": "geometry.stroke",
+                        "stylers": [{
+                                "color": "#fefefe"
+                            },
+                            {
+                                "lightness": 17
+                            },
+                            {
+                                "weight": 1.2
+                            }
+                        ]
+                    }
+                ]
+            };
+
+                // Create the Google Map using our element and options defined above
+                var map = new google.maps.Map(mapElement, mapOptions);
+
+                // Add a marker (note: google.maps.Marker is deprecated; consider migrating to AdvancedMarkerElement)
+                try {
+                    var marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(40.740610, -73.935242),
+                        map: map,
+                        title: 'Limupa',
+                        animation: google.maps.Animation.BOUNCE
+                    });
+                } catch (markerErr) {
+                    console.warn('Marker creation failed (deprecated API or unsupported).', markerErr);
+                }
+            } catch (err) {
+                console.error('Google Maps initialization failed:', err);
+            }
+        });
+    </script>
 
     @livewireScripts
 </body>

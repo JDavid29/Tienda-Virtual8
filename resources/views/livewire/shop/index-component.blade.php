@@ -1,4 +1,7 @@
 <div>
+    {{-- ESTO DEBE SER BOORADO POR FALTA DE USO EN EL SISTEMA NEXTLEVEL --}}
+
+    {{-- ES LA VISTA DEL SISTEMA SIN TEMPLATE --}}
     {{-- Because she competes with no one, no one can compete with her. --}}
     <div class="container">
         <div class="row">
