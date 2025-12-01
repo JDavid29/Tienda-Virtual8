@@ -113,6 +113,7 @@
                             <!-- Begin Header Middle Wishlist Area -->
                             <li class="hm-wishlist">
                                 <a href="{{ route('wishlist') }}">
+                                    {{-- cantidad de productos en la lista de deseos --}}
                                     <span class="cart-item-count wishlist-item-count">0</span>
                                     <i class="fa fa-heart-o"></i>
                                 </a>
