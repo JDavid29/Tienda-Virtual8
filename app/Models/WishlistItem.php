@@ -5,18 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ListaDeDeseo extends Model
+class WishlistItem extends Model
 {
     use HasFactory;
 
     protected $table = 'lista_de_deseos';
-
-    /**
-     * Si la tabla todavía no tiene columnas `created_at`/`updated_at`,
-     * desactivamos timestamps temporalmente para evitar errores
-     * hasta que se apliquen las migraciones.
-     */
-    public $timestamps = false;
 
     protected $fillable = [
         'user_id',

@@ -114,7 +114,7 @@
                             <li class="hm-wishlist">
                                 <a href="{{ route('wishlist') }}">
                                     {{-- cantidad de productos en la lista de deseos --}}
-                                    <span class="cart-item-count wishlist-item-count">0</span>
+                                    <span class="cart-item-count wishlist-item-count">{{ $wishlistCount }}</span>
                                     <i class="fa fa-heart-o"></i>
                                 </a>
                             </li>

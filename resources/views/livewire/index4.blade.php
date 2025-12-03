@@ -98,7 +98,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="static-top-content mt-sm-30">
-                        Gift Special: Gift every single day on Weekends - New Coupon code "
+                        Oferta especial: Regalos todos los días los fines de semana - Nuevo código de cupón " 
                         <span>LimupaSaleoff</span>
                     </div>
                 </div>

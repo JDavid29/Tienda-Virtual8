@@ -1,46 +1,65 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\WishlistItem; // Asumiendo un modelo llamado WishlistItem
+use App\Models\ListaDeDeseo;
+use App\Models\Producto;
 
 class WishlistController extends Controller
 {
     /**
-     * Muestra todos los ítems de la lista de deseos del usuario.
+     * Mostrar los ítems de la lista de deseos del usuario.
      */
     public function index()
     {
-        $items = WishlistItem::where('user_id', auth()->id())->get();
+        $user = auth()->user();
+        if (! $user) {
+            return redirect()->route('login.client');
+        }
+
+        $items = ListaDeDeseo::with('producto')->where('user_id', $user->id)->get();
         return view('wishlist.index', ['items' => $items]);
     }
 
     /**
-     * Almacena un nuevo ítem en la lista de deseos.
+     * Almacenar un nuevo ítem en la lista de deseos.
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'product_id' => 'required|exists:products,id',
+        $user = auth()->user();
+        if (! $user) {
+            return redirect()->route('login.client');
+        }
+
+        $request->validate([
+            'producto_id' => 'required|exists:productos,id',
         ]);
 
-        WishlistItem::create([
-            'user_id' => auth()->id(),
-            'product_id' => $validatedData['product_id'],
+        ListaDeDeseo::firstOrCreate([
+            'user_id' => $user->id,
+            'producto_id' => $request->input('producto_id'),
         ]);
 
-        return redirect()->route('wishlist.index')->with('success', 'Ítem agregado a la lista de deseos.');
+        return redirect()->back()->with('success', 'Producto agregado a la lista de deseos.');
     }
 
     /**
-     * Elimina un ítem de la lista de deseos.
+     * Eliminar un ítem de la lista de deseos.
      */
     public function destroy($id)
     {
-        $item = WishlistItem::findOrFail($id);
-        $item->delete();
+        $user = auth()->user();
+        if (! $user) {
+            return redirect()->route('login.client');
+        }
 
-        return redirect()->route('wishlist.index')->with('success', 'Ítem eliminado de la lista de deseos.');
+        $item = ListaDeDeseo::where('id', $id)->where('user_id', $user->id)->first();
+        if ($item) {
+            $item->delete();
+        }
+
+        return redirect()->back()->with('success', 'Ítem eliminado.');
     }
 }

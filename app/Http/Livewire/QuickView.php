@@ -3,51 +3,30 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Producto;
 use App\Models\ListaDeDeseo;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class ComponentShop3Column extends Component
+class QuickView extends Component
 {
-    use WithPagination;
+    public $productId;
+    public $product;
+    public $quantity = 1;
 
-    protected $paginationTheme = 'bootstrap';
+    protected $listeners = ['show'];
 
-    // number of items per page
-    public $perPage = 12;
-
-    // allow resetting page when filters change in future
-    protected $queryString = ['page'];
-
-    public function updating($name, $value)
+    public function show($id)
     {
-        // if we later add filters, reset page on update
-        if ($name !== 'page') {
-            $this->resetPage();
-        }
+        $this->productId = $id;
+        $this->product = Producto::with('category')->find($id);
+        $this->quantity = 1;
+        $this->dispatchBrowserEvent('openQuickViewModal');
     }
 
-    public function getProductsQueryProperty()
+    public function addToCart()
     {
-        // find smartwatch category id
-        $cat = DB::table('categories')->where('slug', 'smartwatch')->orWhere('name', 'Smartwatch')->first();
-        if (! $cat) {
-            return Producto::query()->whereRaw('0 = 1');
-        }
-
-        return Producto::where('category_id', $cat->id)->with('category')->orderBy('created_at', 'desc');
-    }
-
-    public function getProductsProperty()
-    {
-        return $this->productsQuery->paginate($this->perPage);
-    }
-
-    public function addToCart($productId)
-    {
+        $productId = $this->productId;
         if (! Auth::check()) {
             $this->dispatchBrowserEvent('notify', [
                 'type' => 'error',
@@ -63,13 +42,14 @@ class ComponentShop3Column extends Component
             session()->flash('error', 'Producto no encontrado.');
             return;
         }
+        $qty = max(1, (int) $this->quantity);
 
         try {
             \Cart::session(Auth::id())->add([
                 'id' => $producto->id,
                 'name' => $producto->nombre,
                 'price' => $producto->precio,
-                'quantity' => 1,
+                'quantity' => $qty,
                 'attributes' => ['image' => $producto->cover_img ?? null],
                 'associatedModel' => $producto,
             ]);
@@ -82,7 +62,7 @@ class ComponentShop3Column extends Component
                 'productId' => $productId,
             ]);
         } catch (\Throwable $e) {
-            Log::error('Add to cart failed: '.$e->getMessage());
+            Log::error('QuickView addToCart failed: '.$e->getMessage());
             session()->flash('error', 'No se pudo agregar el producto al carrito.');
             $this->dispatchBrowserEvent('notify', [
                 'type' => 'error',
@@ -93,8 +73,19 @@ class ComponentShop3Column extends Component
         }
     }
 
-    public function addToWishlist($productId)
+    public function increaseQuantity()
     {
+        $this->quantity = max(1, (int) $this->quantity + 1);
+    }
+
+    public function decreaseQuantity()
+    {
+        $this->quantity = max(1, (int) $this->quantity - 1);
+    }
+
+    public function addToWishlist()
+    {
+        $productId = $this->productId;
         if (! Auth::check()) {
             $this->dispatchBrowserEvent('notify', [
                 'type' => 'error',
@@ -118,7 +109,7 @@ class ComponentShop3Column extends Component
                 'productId' => $productId,
             ]);
         } catch (\Throwable $e) {
-            Log::error('Add to wishlist failed: '.$e->getMessage());
+            Log::error('QuickView addToWishlist failed: '.$e->getMessage());
             session()->flash('error', 'No se pudo agregar a la lista de deseos.');
             $this->dispatchBrowserEvent('notify', [
                 'type' => 'error',
@@ -131,8 +122,6 @@ class ComponentShop3Column extends Component
 
     public function render()
     {
-        return view('livewire.component-shop3-column', [
-            'products' => $this->products,
-        ]);
+        return view('livewire.quick-view');
     }
 }

@@ -10,12 +10,14 @@ class ToolbarComponent extends Component
     public $cartSubTotal = 0;
     public $cartIsEmpty = true;
     public $cartTotalQuantity = 0;
+    public $wishlistCount = 0;
 
-    protected $listeners = ['productAdded' => 'updateCart', 'cartUpdated' => 'updateCart'];
+    protected $listeners = ['productAdded' => 'updateCart', 'cartUpdated' => 'updateCart', 'wishlistUpdated' => 'updateWishlist'];
 
     public function mount()
     {
         $this->updateCart();
+        $this->updateWishlist();
     }
 
     public function updateCart()
@@ -36,6 +38,21 @@ class ToolbarComponent extends Component
         } catch (\Exception $e) {
             // En caso de error, usar valores por defecto
             $this->setDefaultCartValues();
+        }
+        // Siempre actualizar contador de lista de deseos al refrescar el carrito
+        $this->updateWishlist();
+    }
+
+    public function updateWishlist()
+    {
+        try {
+            if (auth()->check()) {
+                $this->wishlistCount = \App\Models\ListaDeDeseo::where('user_id', auth()->id())->count();
+            } else {
+                $this->wishlistCount = 0;
+            }
+        } catch (\Exception $e) {
+            $this->wishlistCount = 0;
         }
     }
 

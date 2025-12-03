@@ -73,6 +73,12 @@ Route::get('/paypal-cancel', [PaypalController::class, 'calcelPage'])
 // RUTA DE REGISTRO DE TIENDA
 Route::get('/register-shop', RegisterComponent::class)->name('register.shop');
 
+// PRODUCTO NORMAL
+// Ruta para producto único que recibe el id del producto y lo pasa a la vista
+Route::get('/single-product/{id}', function($id){
+    return view('ProductSingle.Single_Product', compact('id'));
+})->name('single-product');
+
 // Rutas de los comercios con barra lateral izquierda
 Route::get('/shopleftsidebar', function () {
     return view('Shop.ShopLeftSidebar');
@@ -164,12 +170,14 @@ Route::group(['prefix' => 'admin'], function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('voyager.logout');
 });
 
-// RUTA FALLBACK: devolver la vista 404 con código HTTP 404
+// RUTA FALLBACK y vista 404 temporalmente deshabilitadas mientras se trabaja en el proyecto.
+// Si necesitas restaurarlas, quita los comentarios.
+/*
 Route::fallback(function () {
     return response()->view('errors.404', [], 404);
 });
 
-//ruta de error 404 personalizada
 Route::get('/404', function () {
     return view('errors.404');
 })->name('error.404');
+*/
