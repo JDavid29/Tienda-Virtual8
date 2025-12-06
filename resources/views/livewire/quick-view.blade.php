@@ -12,7 +12,12 @@
                                 <div class="product-details-images slider-navigation-1">
                                     @if($product && $product->cover_img)
                                         <div class="lg-image">
-                                            <img src="{{ asset('storage/'.$product->cover_img) }}" alt="{{ $product->nombre }}">
+                                                @include('partials.product-image', [
+                                                    'image' => $product->cover_img ?? null,
+                                                    'alt' => $product->nombre ?? 'Producto',
+                                                    'default' => 'images/product/large-size/1.jpg',
+                                                    'attributesHtml' => ''
+                                                ])
                                         </div>
                                     @else
                                         <div class="lg-image">
@@ -97,7 +102,16 @@
                 }catch(e){
                     // fallback: use vanilla if jQuery not available
                     var modal = document.getElementById('exampleModalCenter');
-                    if(modal){ modal.classList.add('show'); modal.style.display = 'block'; }
+                    if(modal){
+                        modal.classList.add('show');
+                        modal.style.display = 'block';
+                        // accessibility: mark as visible
+                        modal.setAttribute('aria-hidden', 'false');
+                        modal.setAttribute('aria-modal', 'true');
+                        // move focus to close button
+                        var btn = modal.querySelector('button.close');
+                        if(btn) btn.focus();
+                    }
                 }
             });
 
@@ -105,9 +119,24 @@
             document.addEventListener('livewire:load', function(){
                 var m = document.getElementById('exampleModalCenter');
                 if(m){
+                    // If Bootstrap triggers hidden.bs.modal, that's fine. Also handle manual close in fallback.
                     m.addEventListener('hidden.bs.modal', function(){
-                        // noop for now
+                        // ensure aria attributes reset
+                        m.setAttribute('aria-hidden', 'true');
+                        m.removeAttribute('aria-modal');
                     });
+                    var closeBtn = m.querySelector('button.close');
+                    if (closeBtn) {
+                        closeBtn.addEventListener('click', function(){
+                            // fallback hide behavior: remove show and hide
+                            if (typeof $ === 'undefined' || !($.fn && $.fn.modal)) {
+                                m.classList.remove('show');
+                                m.style.display = 'none';
+                                m.setAttribute('aria-hidden', 'true');
+                                m.removeAttribute('aria-modal');
+                            }
+                        });
+                    }
                 }
             });
         })();

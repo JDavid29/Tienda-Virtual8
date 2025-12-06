@@ -23,14 +23,33 @@
                                         <td class="li-product-remove"><a href="#" wire:click.prevent="deleteItem({{ $item["id"] }})" wire:target="deleteItem" role="button"><i class="fa fa-times"></i></a></td>
                                         {{-- visualizacion de la imagen en carrito --}}
                                         <td class="li-product-thumbnail">
-                                            @if(isset($item['attributes'][0]['image']))
-                                                <img src="{{ asset('storage/'.$item['attributes'][0]['image']) }}" width="70" alt="{{ $item['name'] }}">
+                                            @php
+                                                // pick first available image from possible attribute shapes
+                                                $attrs = $item['attributes'] ?? [];
+                                                $img = null;
+                                                if (is_array($attrs)) {
+                                                    $img = $attrs['image'] ?? ($attrs[0]['image'] ?? ($attrs['cover_img'] ?? null));
+                                                } elseif (is_object($attrs)) {
+                                                    $img = $attrs->image ?? ($attrs->cover_img ?? null);
+                                                }
+                                            @endphp
+                                            @if(! empty($img))
+                                                @php
+                                                    if (\Illuminate\Support\Str::startsWith($img, ['http://', 'https://'])) {
+                                                        $src = $img;
+                                                    } elseif (\Illuminate\Support\Str::startsWith($img, ['/storage/', '/'])) {
+                                                        $src = asset(ltrim($img, '/'));
+                                                    } else {
+                                                        $src = asset('storage/' . ltrim($img, '/'));
+                                                    }
+                                                @endphp
+                                                <img src="{{ $src }}" width="70" alt="{{ $item['name'] }}">
                                             @else
-                                                <img src="{{ asset('images/default.jpg') }}" width="70" alt="Imagen no disponible">
+                                                <img src="{{ asset('images/default.png') }}" width="70" alt="Imagen no disponible">
                                             @endif
-                                            </td>
+                                        </td>
                                         <td class="li-product-name"><a href="#">{{ $item["name"] }}</a></td>
-                                        <td class="li-product-price"><span class="amount">${{ number_format($item['price'], 2) }}</span></td>
+                                        <td class="li-product-price"><span class="amount">Bs {{ number_format($item['price'], 2) }}</span></td>
                                         <td class="quantity">
                                             <label>Cantidad</label>
                                             <div class="">
@@ -77,8 +96,15 @@
                                         <li>Descuento <span>BOB. {{ number_format($discount, 2) }}</span></li>
                                         <li>Total <span>BOB. {{ number_format($cartTotal, 2) }}</span></li>
                                     </ul>
-                                    <a href="#">Proceder al pago</a>
-                                    {{-- <a href="{{ route('checkout') }}" class="btn btn-success w-100 mt-3">Proceder al pago</a> --}}
+                                    <br>
+                                    @if(auth()->check())
+                                        <a href="{{ route('verificar') }}">Proceder al pago</a>
+                                    @else
+                                        <div class="d-flex">
+                                            <a href="{{ route('login.client') }}" class="btn btn-primary mr-2">Iniciar sesión</a>
+                                            <a href="{{ route('register') }}" class="btn btn-secondary">Registrarse</a>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

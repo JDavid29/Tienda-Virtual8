@@ -57,6 +57,8 @@ class Wishlist extends Component
             return $this->updateList();
         }
 
+
+
         try {
             // add to cart for current user session
             \Cart::session(Auth::id())->add([
@@ -74,6 +76,9 @@ class Wishlist extends Component
             ListaDeDeseo::where('user_id', Auth::id())
                 ->where('producto_id', $producto->id)
                 ->delete();
+
+            // Inform toolbar and other components
+            $this->emit('wishlistUpdated');
 
             session()->flash('message', 'Producto agregado al carrito y eliminado de la lista de deseos.');
             $this->emit('cartUpdated');
@@ -100,6 +105,8 @@ class Wishlist extends Component
         try {
             $wish->delete();
             session()->flash('message', 'Elemento eliminado de la lista de deseos.');
+            // Notify toolbar and other listeners
+            $this->emit('wishlistUpdated');
             $this->emit('cartUpdated');
         } catch (\Throwable $e) {
             Log::error('Error deleting wishlist item: ' . $e->getMessage());

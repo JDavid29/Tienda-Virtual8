@@ -26,16 +26,31 @@ class ListProduct extends Component
         $producto = Producto::find($productoId);
 
         if ($producto) {
-            \Cart::session(auth()->id())->add(array(
-                'id' => $producto->id,
-                'name' => $producto->nombre,
-                'price' => $producto->precio,
-                'quantity' => 1,
-                'attributes' => array([
-                    'image' => $producto->cover_img, // campo imagen de la tabla productos
-                ]),
-                'associatedModel' => $producto
-            ));
+            try {
+                if (auth()->check()) {
+                    \Cart::session(auth()->id())->add([
+                        'id' => $producto->id,
+                        'name' => $producto->nombre,
+                        'price' => $producto->precio,
+                        'quantity' => 1,
+                        'attributes' => ['image' => $producto->cover_img],
+                        'associatedModel' => $producto
+                    ]);
+                } else {
+                    \Cart::add([
+                        'id' => $producto->id,
+                        'name' => $producto->nombre,
+                        'price' => $producto->precio,
+                        'quantity' => 1,
+                        'attributes' => ['image' => $producto->cover_img],
+                        'associatedModel' => $producto
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                \Log::error('ListProduct agregarCarrito failed: '.$e->getMessage());
+                session()->flash('error', 'No se pudo agregar el producto al carrito.');
+                return;
+            }
 
 
             /*$this->dispatchBrowserEvent('cart-debug', [

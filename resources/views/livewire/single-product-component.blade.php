@@ -81,8 +81,12 @@
                                     <li><i class="fa fa-star-o"></i></li>
                                     <li class="no-star"><i class="fa fa-star-o"></i></li>
                                     <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                    <li class="review-item"><a href="#">Leer reseña</a></li>
-                                    <li class="review-item"><a href="#">Escribir reseña</a></li>
+                                    <li class="review-item">
+                                        <a href="#reviews" onclick="event.preventDefault(); (function(){ var tab = document.querySelector('.li-product-menu a[href="#reviews"]'); if (tab) { try { if (typeof $ !== 'undefined' && typeof $.fn.tab === 'function') { $(tab).tab('show'); } else { tab.click(); } } catch(e){ try{ tab.click(); }catch(err){} } } var el = document.querySelector('#reviews'); if (el) el.scrollIntoView({behavior:'smooth'}); })();">Leer reseñas</a>
+                                    </li>
+                                    <li class="review-item">
+                                        <a href="#" onclick="event.preventDefault(); if (typeof Livewire !== 'undefined') { Livewire.emit('startCreate'); } else { console.error('Livewire not available'); }">Escribir reseña</a>
+                                    </li>
                                 </ul>
                             </div>
                                     <div class="price-box pt-20">
@@ -108,12 +112,12 @@
                                     <div class="quantity">
                                         <label>Cantidad</label>
                                         <div class="cart-plus-minus">
-                                            <input class="cart-plus-minus-box" type="number" min="1" step="1" wire:model="quantity">
+                                            <input name="quantity" class="cart-plus-minus-box" type="number" min="1" step="1" wire:model.defer="quantity">
                                             <div class="dec qtybutton"><a href="#" wire:click.prevent="decreaseQuantity"><i class="fa fa-angle-down"></i></a></div>
                                             <div class="inc qtybutton"><a href="#" wire:click.prevent="increaseQuantity"><i class="fa fa-angle-up"></i></a></div>
                                         </div>
                                     </div>
-                                    <button class="add-to-cart" type="button" wire:click.prevent="addToCart">Añadir al carrito</button>
+                                    <button class="add-to-cart" type="submit">Añadir al carrito</button>
                                 </form>
                             </div>
                             <div class="product-additional-info pt-25">
@@ -185,109 +189,20 @@
                 </div>
                 <div id="product-details" class="tab-pane" role="tabpanel">
                     <div class="product-details-manufacturer">
-                        <a href="#">
-                            <img src="{{ asset('images/product-details/1.jpg') }}" alt="Product Manufacturer Image">
+                        @php
+                            $refUrl = $product->referencia ?? $product->id ?? null;
+                            if ($refUrl && !\Illuminate\Support\Str::startsWith($refUrl, ['http://','https://'])) {
+                                $refUrl = 'http://' . ltrim($refUrl, '/');
+                            }
+                        @endphp
+                        <a href="{{ $refUrl ?? '#' }}" target="_blank" rel="noopener noreferrer">
+                            <img src="{{ $imgUrl }}" alt="{{ $product->nombre ?? 'Product' }}" style="max-width:84px;height:auto;border-radius:4px;">
                         </a>
-                        <p><span>Reference</span> demo_7</p>
-                        <p><span>Reference</span> demo_7</p>
+                        <p><span>Referencia</span> {{ $product->referencia ?? $product->id ?? 'N/A' }}</p>
                     </div>
                 </div>
                 <div id="reviews" class="tab-pane" role="tabpanel">
-                    <div class="product-reviews">
-                        <div class="product-details-comment-block">
-                            <div class="comment-review">
-                                <span>Grade</span>
-                                <ul class="rating">
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li><i class="fa fa-star-o"></i></li>
-                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                </ul>
-                            </div>
-                            <div class="comment-author-infos pt-25">
-                                <span>HTML 5</span>
-                                <em>01-12-18</em>
-                            </div>
-                            <div class="comment-details">
-                                <h4 class="title-block">Demo</h4>
-                                <p>Plaza</p>
-                            </div>
-                            <div class="review-btn">
-                                <a class="review-links" href="#" data-toggle="modal" data-target="#mymodal">Write Your Review!</a>
-                            </div>
-                            <!-- Begin Quick View | Modal Area -->
-                            <div class="modal fade modal-wrapper" id="mymodal" >
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-body">
-                                            <h3 class="review-page-title">Write Your Review</h3>
-                                            <div class="modal-inner-area row">
-                                                <div class="col-lg-6">
-                                                    <div class="li-review-product">
-                                                        <img src="{{ asset('images/product/large-size/3.jpg') }}" alt="Li's Product">
-                                                        <div class="li-review-product-desc">
-                                                            <p class="li-product-name">Today is a good day Framed poster</p>
-                                                            <p>
-                                                                <span>Beach Camera Exclusive Bundle - Includes Two Samsung Radiant 360 R3 Wi-Fi Bluetooth Speakers. Fill The Entire Room With Exquisite Sound via Ring Radiator Technology. Stream And Control R3 Speakers Wirelessly With Your Smartphone. Sophisticated, Modern Design </span>
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="li-review-content">
-                                                        <!-- Begin Feedback Area -->
-                                                        <div class="feedback-area">
-                                                            <div class="feedback">
-                                                                <h3 class="feedback-title">Our Feedback</h3>
-                                                                <form action="#">
-                                                                    <p class="your-opinion">
-                                                                        <label>Your Rating</label>
-                                                                        <span>
-                                                                            <select class="star-rating">
-                                                                                <option value="1">1</option>
-                                                                                <option value="2">2</option>
-                                                                                <option value="3">3</option>
-                                                                                <option value="4">4</option>
-                                                                                <option value="5">5</option>
-                                                                            </select>
-                                                                        </span>
-                                                                    </p>
-                                                                    <p class="feedback-form">
-                                                                        <label for="feedback">Your Review</label>
-                                                                        <textarea id="feedback" name="comment" cols="45" rows="8" aria-required="true"></textarea>
-                                                                    </p>
-                                                                    <div class="feedback-input">
-                                                                        <p class="feedback-form-author">
-                                                                            <label for="author">Name<span class="required">*</span>
-                                                                            </label>
-                                                                            <input id="author" name="author" value="" size="30" aria-required="true" type="text">
-                                                                        </p>
-                                                                        <p class="feedback-form-author feedback-form-email">
-                                                                            <label for="email">Email<span class="required">*</span>
-                                                                            </label>
-                                                                            <input id="email" name="email" value="" size="30" aria-required="true" type="text">
-                                                                            <span class="required"><sub>*</sub> Required fields</span>
-                                                                        </p>
-                                                                        <div class="feedback-btn pb-15">
-                                                                            <a href="#" class="close" data-dismiss="modal" aria-label="Close">Close</a>
-                                                                            <a href="#">Submit</a>
-                                                                        </div>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                        <!-- Feedback Area End Here -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Quick View | Modal Area End Here -->
-                        </div>
-                    </div>
+                    @livewire('product-reviews', ['productId' => $product->id ?? null])
                 </div>
             </div>
         </div>
@@ -301,263 +216,64 @@
                 <div class="col-lg-12">
                     <div class="li-section-title">
                         <h2>
-                            <span>15 otros productos en la misma categoría:</span>
+                            <span>{{ $relatedProducts->count() }} otros productos en la misma categoría:</span>
                         </h2>
                     </div>
                     <div class="row">
                         <div class="product-active owl-carousel">
-                            <div class="col-lg-12">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap">
-                                    <div class="product-image">
-                                        <a href="single-product.html">
-                                            <img src="{{ asset('images/product/large-size/1.jpg') }}" alt="Li's Product Image">
-                                        </a>
-                                        <span class="sticker">New</span>
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            <div class="product-review">
-                                                <h5 class="manufacturer">
-                                                    <a href="product-details.html">Graphic Corner</a>
-                                                </h5>
-                                                <div class="rating-box">
-                                                    <ul class="rating">
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    </ul>
+                                @forelse($relatedProducts as $rp)
+                                @php $defaultRelatedImage = 'images/default.png'; @endphp
+                                <div class="col-lg-12">
+                                    <div class="single-product-wrap">
+                                        <div class="product-image">
+                                            <a href="{{ route('single-product', ['id' => $rp->id]) }}">
+                                                @include('partials.product-image', [
+                                                    'image' => $rp->cover_img ?? null,
+                                                    'alt' => $rp->nombre ?? 'Product',
+                                                    'default' => $defaultRelatedImage,
+                                                    'attributesHtml' => ''
+                                                ])
+                                            </a>
+                                            @if(isset($rp->created_at) && \Carbon\Carbon::parse($rp->created_at)->greaterThanOrEqualTo(\Carbon\Carbon::now()->startOfMonth()))
+                                                <span class="sticker">Nuevo</span>
+                                            @endif
+                                        </div>
+                                        <div class="product_desc">
+                                            <div class="product_desc_info">
+                                                <div class="product-review">
+                                                    <h5 class="manufacturer">
+                                                        <a href="#">{{ $rp->category->name ?? '' }}</a>
+                                                    </h5>
+                                                    <div class="rating-box">
+                                                        <ul class="rating">
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <h4><a class="product_name" href="{{ route('single-product', ['id' => $rp->id]) }}">{{ $rp->nombre }}</a></h4>
+                                                <div class="price-box">
+                                                    <span class="new-price">{{ number_format($rp->precio ?? 0, 2) }}</span>
                                                 </div>
                                             </div>
-                                            <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
-                                            <div class="price-box">
-                                                <span class="new-price">$46.80</span>
+                                            <div class="add-actions">
+                                                <ul class="add-actions-link">
+                                                    <li class="add-cart active"><a href="#" wire:click.prevent="addToCart({{ $rp->id }})">Añadir Al Carrito</a></li>
+                                                    <li><a href="#" title="Vista rápida" class="quick-view-btn" wire:click.prevent="openQuickView({{ $rp->id }})"><i class="fa fa-eye"></i></a></li>
+                                                    <li><a class="links-details" href="#" wire:click.prevent="addToWishlist({{ $rp->id }})"><i class="fa fa-heart-o"></i></a></li>
+                                                </ul>
                                             </div>
-                                        </div>
-                                        <div class="add-actions">
-                                            <ul class="add-actions-link">
-                                                <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                                <!-- single-product-wrap end -->
-                            </div>
-                            <div class="col-lg-12">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap">
-                                    <div class="product-image">
-                                        <a href="single-product.html">
-                                            <img src="{{ asset('images/product/large-size/2.jpg') }}" alt="Li's Product Image">
-                                        </a>
-                                        <span class="sticker">New</span>
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            <div class="product-review">
-                                                <h5 class="manufacturer">
-                                                    <a href="product-details.html">Studio Design</a>
-                                                </h5>
-                                                <div class="rating-box">
-                                                    <ul class="rating">
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <h4><a class="product_name" href="single-product.html">Mug Today is a good day</a></h4>
-                                            <div class="price-box">
-                                                <span class="new-price new-price-2">$71.80</span>
-                                                <span class="old-price">$77.22</span>
-                                                <span class="discount-percentage">-7%</span>
-                                            </div>
-                                        </div>
-                                        <div class="add-actions">
-                                            <ul class="add-actions-link">
-                                                <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                            @empty
+                                <div class="col-12">
+                                    <p>No hay otros productos en esta categoría.</p>
                                 </div>
-                                <!-- single-product-wrap end -->
-                            </div>
-                            <div class="col-lg-12">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap">
-                                    <div class="product-image">
-                                        <a href="single-product.html">
-                                            <img src="{{ asset('images/product/large-size/3.jpg') }}" alt="Li's Product Image">
-                                        </a>
-                                        <span class="sticker">New</span>
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            <div class="product-review">
-                                                <h5 class="manufacturer">
-                                                    <a href="product-details.html">Graphic Corner</a>
-                                                </h5>
-                                                <div class="rating-box">
-                                                    <ul class="rating">
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
-                                            <div class="price-box">
-                                                <span class="new-price">$46.80</span>
-                                            </div>
-                                        </div>
-                                        <div class="add-actions">
-                                            <ul class="add-actions-link">
-                                                <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- single-product-wrap end -->
-                            </div>
-                            <div class="col-lg-12">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap">
-                                    <div class="product-image">
-                                        <a href="single-product.html">
-                                            <img src="{{ asset('images/product/large-size/4.jpg') }}" alt="Li's Product Image">
-                                        </a>
-                                        <span class="sticker">New</span>
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            <div class="product-review">
-                                                <h5 class="manufacturer">
-                                                    <a href="product-details.html">Studio Design</a>
-                                                </h5>
-                                                <div class="rating-box">
-                                                    <ul class="rating">
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <h4><a class="product_name" href="single-product.html">Mug Today is a good day</a></h4>
-                                            <div class="price-box">
-                                                <span class="new-price new-price-2">$71.80</span>
-                                                <span class="old-price">$77.22</span>
-                                                <span class="discount-percentage">-7%</span>
-                                            </div>
-                                        </div>
-                                        <div class="add-actions">
-                                            <ul class="add-actions-link">
-                                                <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- single-product-wrap end -->
-                            </div>
-                            <div class="col-lg-12">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap">
-                                    <div class="product-image">
-                                        <a href="single-product.html">
-                                            <img src="{{ asset('images/product/large-size/5.jpg') }}" alt="Li's Product Image">
-                                        </a>
-                                        <span class="sticker">New</span>
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            <div class="product-review">
-                                                <h5 class="manufacturer">
-                                                    <a href="product-details.html">Graphic Corner</a>
-                                                </h5>
-                                                <div class="rating-box">
-                                                    <ul class="rating">
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
-                                            <div class="price-box">
-                                                <span class="new-price">$46.80</span>
-                                            </div>
-                                        </div>
-                                        <div class="add-actions">
-                                            <ul class="add-actions-link">
-                                                <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- single-product-wrap end -->
-                            </div>
-                            <div class="col-lg-12">
-                                <!-- single-product-wrap start -->
-                                <div class="single-product-wrap">
-                                    <div class="product-image">
-                                        <a href="single-product.html">
-                                            <img src="{{ asset('images/product/large-size/6.jpg') }}" alt="Li's Product Image">
-                                        </a>
-                                        <span class="sticker">New</span>
-                                    </div>
-                                    <div class="product_desc">
-                                        <div class="product_desc_info">
-                                            <div class="product-review">
-                                                <h5 class="manufacturer">
-                                                    <a href="product-details.html">Studio Design</a>
-                                                </h5>
-                                                <div class="rating-box">
-                                                    <ul class="rating">
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <h4><a class="product_name" href="single-product.html">Mug Today is a good day</a></h4>
-                                            <div class="price-box">
-                                                <span class="new-price new-price-2">$71.80</span>
-                                                <span class="old-price">$77.22</span>
-                                                <span class="discount-percentage">-7%</span>
-                                            </div>
-                                        </div>
-                                        <div class="add-actions">
-                                            <ul class="add-actions-link">
-                                                <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- single-product-wrap end -->
-                            </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -566,55 +282,48 @@
         </div>
     </section>
     <!-- Li's Laptop Product Area End Here -->
-    <div class="livewire-toast-container" id="livewire-toast-container" aria-live="polite"></div>
+    {{-- live-notify handled globally via partial included in layout --}}
 
     <script>
         (function(){
-            // listen for server dispatched notifications
-            window.addEventListener('notify', function (e) {
+            // Ensure Livewire receives the latest input value when the form is submitted
+            document.addEventListener('submit', function(e){
                 try {
-                    var detail = e.detail || {};
-                    var type = detail.type || 'success';
-                    var message = detail.message || '';
-                    var action = detail.action || '';
-
-                    // create toast
-                    var container = document.getElementById('livewire-toast-container');
-                    var toast = document.createElement('div');
-                    toast.className = 'livewire-toast ' + (type === 'error' ? 'error' : 'success');
-                    toast.textContent = message;
-                    container.appendChild(toast);
-
-                    // show
-                    setTimeout(function(){ toast.classList.add('show'); }, 10);
-
-                    // animate target button in this component
-                    // if action is 'cart' -> animate .add-to-cart
-                    if (action === 'cart') {
-                        var btn = document.querySelector('.single-add-to-cart .add-to-cart');
-                        if (btn) {
-                            btn.classList.add('flash-pulse');
-                            setTimeout(function(){ btn.classList.remove('flash-pulse'); }, 900);
+                    var form = e.target;
+                    if (form && form.classList && form.classList.contains('cart-quantity')) {
+                        var input = form.querySelector('input[name="quantity"]');
+                        if (input) {
+                            input.dispatchEvent(new Event('input', { bubbles: true }));
+                            input.dispatchEvent(new Event('change', { bubbles: true }));
                         }
                     }
-                    // if action is 'wishlist' -> animate .wishlist-btn
-                    if (action === 'wishlist') {
-                        var wl = document.querySelector('.product-additional-info .wishlist-btn');
-                        if (wl) {
-                            wl.classList.add('flash-pulse');
-                            setTimeout(function(){ wl.classList.remove('flash-pulse'); }, 900);
+                } catch(err) {
+                    // silent
+                }
+            }, true);
+
+            // Some UI plugins modify the input value without emitting events.
+            // Listen for clicks on the plus/minus controls and force input/change.
+            document.addEventListener('click', function(e){
+                try {
+                    var el = e.target;
+                    // find closest cart-plus-minus container
+                    var box = el.closest && el.closest('.cart-plus-minus');
+                    if (box) {
+                        var input = box.querySelector('input[name="quantity"]');
+                        if (input) {
+                            // small delay allows plugin to update value first
+                            setTimeout(function(){
+                                input.dispatchEvent(new Event('input', { bubbles: true }));
+                                input.dispatchEvent(new Event('change', { bubbles: true }));
+                            }, 1);
                         }
                     }
-
-                    // remove toast after timeout
-                    setTimeout(function(){
-                        toast.classList.remove('show');
-                        setTimeout(function(){ if (toast.parentNode) toast.parentNode.removeChild(toast); }, 200);
-                    }, 3000);
-                } catch (err) {
-                    console.error('notify handler error', err);
+                } catch(err) {
+                    // silent
                 }
             });
         })();
     </script>
+
 </div>

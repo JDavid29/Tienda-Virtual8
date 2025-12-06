@@ -29,16 +29,30 @@ class IndexComponent extends Component
             return;
         }
 
-        // Agregar al carrito
-        \Cart::add([
-            'id' => $producto->id,
-            'name' => $producto->nombre,
-            'price' => $producto->precio,
-            'quantity' => 1,
-            'attributes' => [
-                'cover_img' => $producto->cover_img ?? 'default.jpg',
-            ]
-        ]);
+
+
+        // Agregar al carrito (manejar usuario autenticado o guest)
+        if (auth()->check()) {
+            \Cart::session(auth()->id())->add([
+                'id' => $producto->id,
+                'name' => $producto->nombre,
+                'price' => $producto->precio,
+                'quantity' => 1,
+                'attributes' => [
+                    'cover_img' => $producto->cover_img ?? 'default.jpg',
+                ]
+            ]);
+        } else {
+            \Cart::add([
+                'id' => $producto->id,
+                'name' => $producto->nombre,
+                'price' => $producto->precio,
+                'quantity' => 1,
+                'attributes' => [
+                    'cover_img' => $producto->cover_img ?? 'default.jpg',
+                ]
+            ]);
+        }
 
         // Emitir eventos para actualizar el toolbar
         $this->emit('productAdded');

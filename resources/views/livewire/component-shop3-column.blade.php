@@ -52,10 +52,17 @@
                                                 <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
                                                     <div class="single-product-wrap">
                                                         <div class="product-image">
-                                                            <a href="#">
-                                                                <img src="{{ $prod->cover_img ? asset('storage/'.$prod->cover_img) : asset('images/default.jpg') }}" alt="{{ $prod->nombre }}">
+                                                            <a href="#" wire:click.prevent="viewProduct({{ $prod->id }})">
+                                                                @include('partials.product-image', [
+                                                                    'image' => $prod->cover_img ?? null,
+                                                                    'alt' => $prod->nombre ?? '',
+                                                                    'default' => 'images/default.png',
+                                                                    'attributesHtml' => ''
+                                                                ])
                                                             </a>
-                                                            <span class="sticker">New</span>
+                                                                    @if(isset($prod->created_at) && \Carbon\Carbon::parse($prod->created_at)->greaterThanOrEqualTo(\Carbon\Carbon::now()->startOfMonth()))
+                                                                        <span class="sticker">Nuevo</span>
+                                                                    @endif
                                                         </div>
                                                         <div class="product_desc">
                                                             <div class="product_desc_info">
@@ -72,7 +79,7 @@
                                                                         </ul>
                                                                     </div>
                                                                 </div>
-                                                                <h4><a class="product_name" href="#">{{ $prod->nombre }}</a></h4>
+                                                                <h4><a class="product_name" href="#" wire:click.prevent="viewProduct({{ $prod->id }})">{{ $prod->nombre }}</a></h4>
                                                                 <div class="price-box">
                                                                     <span class="new-price">BOB {{ number_format($prod->precio ?? 0, 2) }}</span>
                                                                 </div>
@@ -103,15 +110,20 @@
                                                 <div class="row product-layout-list mb-4">
                                                     <div class="col-lg-3 col-md-5">
                                                         <div class="product-image">
-                                                            <a href="#">
-                                                                <img src="{{ $prod->cover_img ? asset('storage/'.$prod->cover_img) : asset('images/default.jpg') }}" alt="{{ $prod->nombre }}">
+                                                            <a href="#" wire:click.prevent="viewProduct({{ $prod->id }})">
+                                                                @include('partials.product-image', [
+                                                                    'image' => $prod->cover_img ?? null,
+                                                                    'alt' => $prod->nombre ?? '',
+                                                                    'default' => 'images/default.png',
+                                                                    'attributesHtml' => ''
+                                                                ])
                                                             </a>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-5 col-md-7">
                                                         <div class="product_desc">
                                                             <div class="product_desc_info">
-                                                                <h4><a class="product_name" href="#">{{ $prod->nombre }}</a></h4>
+                                                                <h4><a class="product_name" href="#" wire:click.prevent="viewProduct({{ $prod->id }})">{{ $prod->nombre }}</a></h4>
                                                                 <div class="price-box">
                                                                     <span class="new-price">BOB {{ number_format($prod->precio ?? 0, 2) }}</span>
                                                                 </div>
@@ -124,7 +136,7 @@
                                                                 <ul class="add-actions-link">
                                                                 <li class="add-cart"><a href="#" class="btn-add-cart" data-product-id="{{ $prod->id }}" wire:click.prevent="addToCart({{ $prod->id }})">Añadir Al Carrito</a></li>
                                                                 <li class="wishlist"><a href="#" class="btn-wishlist" data-product-id="{{ $prod->id }}" wire:click.prevent="addToWishlist({{ $prod->id }})"><i class="fa fa-heart-o"></i>Añadir a la lista de deseos</a></li>
-                                                                <li><a class="quick-view" href="#" wire:click.prevent="$emitTo('quick-view','show', {{ $prod->id }})"><i class="fa fa-eye"></i>Quick view</a></li>
+                                                                <li><a class="quick-view" href="#" wire:click.prevent="$emitTo('quick-view','show', {{ $prod->id }})"><i class="fa fa-eye"></i>Vista rápida</a></li>
                                                             </ul>
                                                         </div>
                                                     </div>
@@ -156,65 +168,5 @@
     </div>
     <!-- Content Wraper Area End Here -->
 
+    {{-- live-notify: shared notification partial is included in the layout --}}
 </div>
-
-    <!-- Toast / Animation container -->
-    <div id="live-notify-container" style="position:fixed;top:20px;right:20px;z-index:9999;pointer-events:none"></div>
-
-    <style>
-        .lv-toast{pointer-events:auto;min-width:220px;background:#fff;padding:10px 14px;border-radius:6px;box-shadow:0 6px 18px rgba(0,0,0,0.12);margin-top:10px;font-size:14px;display:flex;align-items:center}
-        .lv-toast-success{border-left:4px solid #28a745}
-        .lv-toast-error{border-left:4px solid #dc3545}
-        .lv-toast .lv-msg{margin-left:8px}
-        .lv-pulse{animation:lv-pop .45s ease forwards}
-        @keyframes lv-pop{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
-        .lv-pulse-heart{color:#e74c3c;transform-origin:center}
-    </style>
-
-    <script>
-        (function(){
-            function showToast(type, message){
-                var container = document.getElementById('live-notify-container');
-                if(!container) return;
-                var toast = document.createElement('div');
-                toast.className = 'lv-toast ' + (type === 'success' ? 'lv-toast-success' : 'lv-toast-error');
-                toast.innerHTML = '<strong>' + (type === 'success' ? 'Éxito' : 'Error') + '</strong><div class="lv-msg">' + (message || '') + '</div>';
-                container.appendChild(toast);
-                setTimeout(function(){ toast.style.opacity = '0'; toast.style.transition = 'opacity .4s'; }, 3000);
-                setTimeout(function(){ try{ container.removeChild(toast);}catch(e){} }, 3500);
-            }
-
-            window.addEventListener('notify', function(e){
-                var detail = (e && e.detail) ? e.detail : {};
-                var type = detail.type || 'success';
-                var message = detail.message || '';
-                var action = detail.action || null;
-                var productId = detail.productId || null;
-
-                // show toast
-                showToast(type, message);
-
-                // animate target button if present
-                if(productId && action === 'wishlist'){
-                    var sel = document.querySelector('.btn-wishlist[data-product-id="' + productId + '"]');
-                    if(sel){
-                        var icon = sel.querySelector('i');
-                        if(icon){
-                            icon.classList.add('lv-pulse-heart');
-                            icon.classList.add('lv-pulse');
-                            setTimeout(function(){ icon.classList.remove('lv-pulse'); }, 600);
-                        }
-                    }
-                }
-
-                if(productId && action === 'cart'){
-                    var sel2 = document.querySelector('.btn-add-cart[data-product-id="' + productId + '"]');
-                    if(sel2){
-                        sel2.classList.add('lv-pulse');
-                        setTimeout(function(){ sel2.classList.remove('lv-pulse'); }, 600);
-                    }
-                }
-            });
-        })();
-    </script>
-

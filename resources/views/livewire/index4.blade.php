@@ -20,7 +20,12 @@
                                             </div>
                                         </div>
                                         <div class="slider-thumb">
-                                            <img src="{{ $prod->cover_img ? asset('storage/'.$prod->cover_img) : asset('images/default.jpg') }}" alt="{{ $prod->nombre ?? 'Imagen producto' }}">
+                                            @include('partials.product-image', [
+                                                'image' => $prod->cover_img ?? null,
+                                                'alt' => $prod->nombre ?? 'Imagen producto',
+                                                'default' => 'images/default.jpg',
+                                                'attributesHtml' => ''
+                                            ])
                                         </div>
                                     </div>
                                 @endforeach
@@ -98,7 +103,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="static-top-content mt-sm-30">
-                        Oferta especial: Regalos todos los días los fines de semana - Nuevo código de cupón " 
+                        Oferta especial: Regalos todos los días los fines de semana - Nuevo código de cupón "
                         <span>LimupaSaleoff</span>
                     </div>
                 </div>

@@ -24,13 +24,19 @@ class ToolbarComponent extends Component
     {
         try {
             // Verificar si la clase Cart existe y está disponible
-            if (class_exists('\\Cart') && app()->has('cart')) {
-                $cart = app('cart');
-
-                $this->cartItems = $cart->session(auth()->id())->getContent()->toArray();
-                $this->cartSubTotal = $cart->session(auth()->id())->getSubTotal();
-                $this->cartIsEmpty = $cart->session(auth()->id())->isEmpty();
-                $this->cartTotalQuantity = $cart->session(auth()->id())->getTotalQuantity();
+            if (class_exists('\\Cart')) {
+                // usar la fachada Cart; manejar usuarios autenticados y guest
+                if (auth()->check()) {
+                    $this->cartItems = \Cart::session(auth()->id())->getContent()->toArray();
+                    $this->cartSubTotal = \Cart::session(auth()->id())->getSubTotal();
+                    $this->cartIsEmpty = \Cart::session(auth()->id())->isEmpty();
+                    $this->cartTotalQuantity = \Cart::session(auth()->id())->getTotalQuantity();
+                } else {
+                    $this->cartItems = \Cart::getContent()->toArray();
+                    $this->cartSubTotal = \Cart::getSubTotal();
+                    $this->cartIsEmpty = \Cart::isEmpty();
+                    $this->cartTotalQuantity = \Cart::getTotalQuantity();
+                }
             } else {
                 // Si Cart no está disponible, usar valores por defecto
                 $this->setDefaultCartValues();
@@ -67,9 +73,12 @@ class ToolbarComponent extends Component
     public function removeFromCart($productId)
     {
         try {
-            if (class_exists('\\Cart') && app()->has('cart')) {
-                $cart = app('cart');
-                $cart->remove($productId);
+            if (class_exists('\\Cart')) {
+                if (auth()->check()) {
+                    \Cart::session(auth()->id())->remove($productId);
+                } else {
+                    \Cart::remove($productId);
+                }
                 $this->updateCart();
                 $this->emit('cartUpdated');
             }

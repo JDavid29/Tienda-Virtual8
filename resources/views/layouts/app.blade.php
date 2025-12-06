@@ -96,6 +96,7 @@
             @yield('content')
         </main>
     </div>
+    @include('partials.live-notify')
     @livewireScripts
 </body>
 </html>

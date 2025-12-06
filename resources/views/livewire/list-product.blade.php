@@ -53,7 +53,12 @@
                                                     <div class="single-product-wrap">
                                                         <div class="product-image">
                                                             <a href="single-product.html">
-                                                                <img src="storage/{{ $producto->cover_img }}" alt="Li's Product Image">
+                                                                @include('partials.product-image', [
+                                                                    'image' => $producto->cover_img ?? null,
+                                                                    'alt' => $producto->nombre ?? "Li's Product Image",
+                                                                    'default' => 'images/product/large-size/1.jpg',
+                                                                    'attributesHtml' => ''
+                                                                ])
                                                             </a>
                                                             <span class="sticker">New</span>
                                                         </div>
@@ -81,7 +86,7 @@
                                                             <div class="add-actions">
                                                                 <ul class="add-actions-link">
                                                                     <li class="add-cart active"><a href="#" wire:click.prevent="agregarCarrito({{ $producto->id }})" wire:target="agregarCarrito" role="button">Añadir</a></li>
-                                                                    <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
+                                                                    <li><a href="#" title="Vista rápida" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
                                                                     <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
                                                                 </ul>
                                                             </div>

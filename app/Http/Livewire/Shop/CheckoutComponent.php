@@ -25,6 +25,10 @@ class CheckoutComponent extends Component
     }
 
     public function make_order(){
+        if (!auth()->check()) {
+            return redirect()->route('login')->with('error', 'Por favor inicia sesión para completar la compra.');
+        }
+
         $this->validate([
             'fullname' => 'required',
             'address' => 'required',
@@ -83,7 +87,7 @@ class CheckoutComponent extends Component
 
         Mail::to($order->user->email)->send(new OrderPaid($order));
 
-        \Cart::session(auth()->id())->clear(); //limpiamos el product del carito despues de la compra
+        \Cart::session(auth()->id())->clear(); // limpiamos el carrito del usuario autenticado
 
         return redirect()->route('shop.index');//->withMessage('Su pedido esta siendo procesado');
 

@@ -39,7 +39,11 @@ class PaypalController extends Controller
                 $order->save();
                 Mail::to($order->user->email)->send(new OrderPaid($order));
 
-                \Cart::session(auth()->id())->clear(); //limpiamos el product del carito despues de la compra
+                if (auth()->check()) {
+                    \Cart::session(auth()->id())->clear(); // limpiamos el carrito del usuario autenticado
+                } else {
+                    \Cart::clear(); // limpiamos el carrito global (guest)
+                }
                 return redirect()->route('shop.index')->withMessage('Pago exitoso');
             }
         }
@@ -53,14 +57,22 @@ class PaypalController extends Controller
     }
 
     public function checkoutData($orderId){
-        $cart = \Cart::session(auth()->id());
+        $cart = auth()->check() ? \Cart::session(auth()->id()) : \Cart::getContent();
+
+        if ($cart instanceof \Darryldecode\Cart\CartCollection || is_array($cart)) {
+            $cartItemsCollection = $cart;
+        } else {
+            // When using session() it returns the Cart instance
+            $cartItemsCollection = $cart->getContent();
+        }
+
         $cartItems = array_map(function($item){
             return [
                 'name' => $item['name'],
                 'price' => $item['price'],
                 'qty' => $item['quantity'],
             ];
-        }, $cart->getContent()->toarray());
+        }, $cartItemsCollection->toArray());
 
         $checkoutData = [
             'items' => $cartItems,
@@ -68,7 +80,7 @@ class PaypalController extends Controller
             'invoice_description' => "descripcion de orden",
             'return_url' => route('paypal.success', $orderId),
             'cancel_url' => route('paypal.cancel'),
-            'total' => $cart->getTotal(),
+            'total' => (auth()->check() && method_exists($cart, 'getTotal')) ? $cart->getTotal() : \Cart::getTotal(),
         ];
         return $checkoutData;
     }

@@ -59,8 +59,8 @@
                                 <div class="ht-language-trigger"><span>Español</span></div>
                                 <div class="language ht-language">
                                     <ul class="ht-setting-list">
-                                        <li class="active"><a href="#"><img src="images/menu/flag-icon/3.jpg" alt="">Español</a></li>
-                                        <li><a href="#"><img src="images/menu/flag-icon/1.jpg" alt="">Inglés</a></li>
+                                        <li class="active"><a href="#"><img src="{{ asset('images/menu/flag-icon/3.jpg') }}" alt="">Español</a></li>
+                                        <li><a href="#"><img src="{{ asset('images/menu/flag-icon/1.jpg') }}" alt="">Inglés</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -82,7 +82,7 @@
                 <div class="col-lg-3">
                     <div class="logo pb-sm-30 pb-xs-30">
                         <a href="index.html">
-                            <img src="images/menu/logo/2.JPG" alt="">
+                            <img src="{{ asset('images/menu/logo/2.JPG') }}" alt="">
                         </a>
                     </div>
                 </div>
@@ -139,11 +139,12 @@
                                             @foreach ($cartItems as $item)
                                                 <li>
                                                     <a href="single-product.html" class="minicart-product-image">
-                                                        @if(isset($item['attributes']['cover_img']) && $item['attributes']['cover_img'])
-                                                            <img src="{{ asset('storage/' . $item['attributes']['cover_img']) }}" alt="cart products">
-                                                        @else
-                                                            <img src="{{ asset('image_default.png') }}" alt="cart products">
-                                                        @endif
+                                                            @include('partials.product-image', [
+                                                                'image' => $item['attributes']['image'] ?? $item['attributes']['cover_img'] ?? null,
+                                                                'alt' => $item['name'] ?? 'cart products',
+                                                                'default' => 'images/default.png',
+                                                                'attributesHtml' => ''
+                                                            ])
                                                     </a>
                                                     <div class="minicart-product-details">
                                                         <h6><a href="single-product.html">{{ $item['name'] }}</a></h6>
@@ -161,7 +162,7 @@
                                         <a href="/cart" class="li-button li-button-dark li-button-fullwidth li-button-sm">
                                             <span>VER CARRITO COMPLETO</span>
                                         </a>
-                                        <a href="checkout.html" class="li-button li-button-fullwidth li-button-sm">
+                                        <a href="{{ route('verificar') }}" class="li-button li-button-fullwidth li-button-sm">
                                             <span>VERIFICAR</span>
                                         </a>
                                     </div>

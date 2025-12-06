@@ -48,31 +48,35 @@ class ComponentShop3Column extends Component
 
     public function addToCart($productId)
     {
-        if (! Auth::check()) {
-            $this->dispatchBrowserEvent('notify', [
-                'type' => 'error',
-                'message' => 'Debes iniciar sesión para agregar al carrito.',
-                'action' => 'cart',
-                'productId' => $productId,
-            ]);
-            return redirect()->route('login.client');
-        }
-
         $producto = Producto::find($productId);
         if (! $producto) {
             session()->flash('error', 'Producto no encontrado.');
             return;
         }
 
+
+
         try {
-            \Cart::session(Auth::id())->add([
-                'id' => $producto->id,
-                'name' => $producto->nombre,
-                'price' => $producto->precio,
-                'quantity' => 1,
-                'attributes' => ['image' => $producto->cover_img ?? null],
-                'associatedModel' => $producto,
-            ]);
+            if (Auth::check()) {
+                \Cart::session(Auth::id())->add([
+                    'id' => $producto->id,
+                    'name' => $producto->nombre,
+                    'price' => $producto->precio,
+                    'quantity' => 1,
+                    'attributes' => ['image' => $producto->cover_img ?? null],
+                    'associatedModel' => $producto,
+                ]);
+            } else {
+                \Cart::add([
+                    'id' => $producto->id,
+                    'name' => $producto->nombre,
+                    'price' => $producto->precio,
+                    'quantity' => 1,
+                    'attributes' => ['image' => $producto->cover_img ?? null],
+                    'associatedModel' => $producto,
+                ]);
+            }
+
             session()->flash('message', 'Producto agregado al carrito.');
             $this->emit('cartUpdated');
             $this->dispatchBrowserEvent('notify', [
@@ -117,6 +121,8 @@ class ComponentShop3Column extends Component
                 'action' => 'wishlist',
                 'productId' => $productId,
             ]);
+            // Inform toolbar and other listeners that wishlist changed
+            $this->emit('wishlistUpdated');
         } catch (\Throwable $e) {
             Log::error('Add to wishlist failed: '.$e->getMessage());
             session()->flash('error', 'No se pudo agregar a la lista de deseos.');
@@ -127,6 +133,15 @@ class ComponentShop3Column extends Component
                 'productId' => $productId,
             ]);
         }
+    }
+
+    /**
+     * Navigate to single product view.
+     * Using Livewire redirect so it works both in SPA flows and normal requests.
+     */
+    public function viewProduct($productId)
+    {
+        return redirect()->route('single-product', ['id' => $productId]);
     }
 
     public function render()

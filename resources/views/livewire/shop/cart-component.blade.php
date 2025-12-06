@@ -10,6 +10,13 @@
         0
     @endauth --}}
 
-    {{ \Cart::session(auth()->id())->getContent()->count() }} {{-- contamos los productos diferentes en el carrito --}}
+    @php
+        try {
+            $cartCount = auth()->check() ? \Cart::session(auth()->id())->getContent()->count() : \Cart::getContent()->count();
+        } catch (\Throwable $e) {
+            $cartCount = 0;
+        }
+    @endphp
+    {{ $cartCount }} {{-- contamos los productos diferentes en el carrito --}}
     {{-- {{ \Cart::session(auth()->id())->getTotalQuantity() }} total de productos en el cart --}}
 </div>

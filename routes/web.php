@@ -56,9 +56,21 @@ Route::get('/login-client', function () {
     return view('auth.login-client');
 })->name('login.client');
 
+Route::get('/verificar', function(){
+    if (!auth()->check()) {
+        return redirect()->route('login.client')->with('info', 'Por favor inicia sesión o regístrate para continuar con el pago.');
+    }
+    return view('checkout.checkout');
+})->name('verificar');
+
 // RUTAS DE CARRITO Y COMPRAS
 Route::get('/cart', CartIndexComponent::class)->name('cart');
-Route::get('/checkout', CheckoutComponent::class)->name('checkout');
+Route::get('/checkout', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login.client')->with('info', 'Por favor inicia sesión o regístrate para continuar con el pago.');
+    }
+    return view('checkout.checkout');
+})->name('checkout');
 
 // RUTAS DE PAGO PAYPAL
 Route::get('/paypal/checkout/{order}', [PaypalController::class, 'getExpressCheckout'])

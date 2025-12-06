@@ -334,6 +334,7 @@
         });
     </script>
 
+    @include('partials.live-notify')
     @livewireScripts
 </body>
 

@@ -10,7 +10,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-6 pb-sm-55 pb-xs-55">
                                 <div class="li-shipping-inner-box">
                                     <div class="shipping-icon">
-                                        <img src="images/shipping-icon/1.png" alt="Shipping Icon">
+                                        <img src="{{ asset('images/shipping-icon/1.png') }}" alt="Shipping Icon">
                                     </div>
                                     <div class="shipping-text">
                                         <h2>Entrega via terminal</h2>
@@ -24,7 +24,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-6 pb-sm-55 pb-xs-55">
                                 <div class="li-shipping-inner-box">
                                     <div class="shipping-icon">
-                                        <img src="images/shipping-icon/2.png" alt="Shipping Icon">
+                                        <img src="{{ asset('images/shipping-icon/2.png') }}" alt="Shipping Icon">
                                     </div>
                                     <div class="shipping-text">
                                         <h2>Pago Seguro</h2>
@@ -37,7 +37,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-6 pb-xs-30">
                                 <div class="li-shipping-inner-box">
                                     <div class="shipping-icon">
-                                        <img src="images/shipping-icon/3.png" alt="Shipping Icon">
+                                        <img src="{{ asset('images/shipping-icon/3.png') }}" alt="Shipping Icon">
                                     </div>
                                     <div class="shipping-text">
                                         <h2>Compra con confianza</h2>
@@ -51,7 +51,7 @@
                             <div class="col-lg-3 col-md-6 col-sm-6 pb-xs-30">
                                 <div class="li-shipping-inner-box">
                                     <div class="shipping-icon">
-                                        <img src="images/shipping-icon/4.png" alt="Shipping Icon">
+                                        <img src="{{ asset('images/shipping-icon/4.png') }}" alt="Shipping Icon">
                                     </div>
                                     <div class="shipping-text">
                                         <h2>Centro de ayuda 24/7</h2>
@@ -74,8 +74,8 @@
                             <!-- Begin Footer Logo Area -->
                             <div class="col-lg-4 col-md-6">
                                 <div class="footer-logo">
-                                    <a href="https://www.uajms.edu.bo/firnt/" target="_blank">
-                                        <img src="images/menu/logo/3.png" alt="Footer Logo" alt="50" height="100">
+                                        <a href="https://www.uajms.edu.bo/firnt/" target="_blank">
+                                        <img src="{{ asset('images/menu/logo/3.png') }}" alt="Footer Logo" width="100%" height="25%">
                                     </a>
                                     <p class="info">
                                     La Universidad Autónoma Juan Misael Saracho es una universidad pública boliviana. La universidad fue nombrada en honor al periodista y político boliviano Juan Misael Saracho.
@@ -221,7 +221,7 @@
                             <!-- Begin Footer Payment Area -->
                             <div class="copyright text-center">
                                 <a href="#">
-                                    <img src="images/payment/1.png" alt="">
+                                    <img src="{{ asset('images/payment/1.png') }}" alt="">
                                 </a>
                             </div>
                             <!-- Footer Payment Area End Here -->

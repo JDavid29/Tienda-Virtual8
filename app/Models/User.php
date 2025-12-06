@@ -46,4 +46,9 @@ class User extends \TCG\Voyager\Models\User
     public function shop(){ //aqui vamos a crear la relacion tienda
         return $this->hasOne(Shop::class, 'user_id');
     }
+
+    public function resenas()
+    {
+        return $this->hasMany(\App\Models\Resena::class, 'user_id');
+    }
 }
