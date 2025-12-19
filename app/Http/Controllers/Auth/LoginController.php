@@ -57,28 +57,29 @@ class LoginController extends Controller
      */
     protected function authenticated($request, $user)
     {
-        // Si el usuario tiene rol Admin (Voyager roles) o el email coincide con patrón de admin
+        // Detectar rol principal vía Voyager: users.role_id o relación role
+        $roleName = null;
         try {
-            $roleName = method_exists($user, 'roles') && $user->roles()->exists()
-                ? optional($user->roles()->first())->name
-                : null;
+            $roleName = optional($user->role)->name; // Voyager: relación belongsTo Role
+            if (!$roleName && isset($user->role_id)) {
+                // Fallback por IDs comunes (ajusta si tu instalación usa otros IDs)
+                // 1: admin, 3: seller
+                $map = [1 => 'admin', 3 => 'seller'];
+                $roleName = $map[(int) $user->role_id] ?? null;
+            }
         } catch (\Throwable $e) {
             $roleName = null;
         }
 
-        $isAdmin = false;
-        if ($roleName) {
-            $isAdmin = strcasecmp($roleName, 'admin') === 0;
-        }
-        // Heurística adicional por correo (opcional): si el email empieza con 'admin' o pertenece a dominio interno
-        if (!$isAdmin && isset($user->email)) {
-            $email = strtolower($user->email);
-            $isAdmin = str_starts_with($email, 'admin@') || str_contains($email, '@empresa.local');
+        $normalized = $roleName ? strtolower($roleName) : null;
+        $isPanelUser = in_array($normalized, ['admin', 'seller'], true);
+
+        if ($isPanelUser) {
+            // Enviar a panel de Voyager
+            return redirect()->route('voyager.dashboard');
         }
 
-        if ($isAdmin) {
-            return redirect()->intended('/admin');
-        }
-        return redirect()->intended(route('inicio'));
+        // Usuarios normales: enviar a inicio de la tienda
+        return redirect()->route('inicio');
     }
 }

@@ -79,15 +79,8 @@
                                     @elseif (isset($row->details->view))
                                         @include($row->details->view, ['row' => $row, 'dataType' => $dataType, 'dataTypeContent' => $dataTypeContent, 'content' => $dataTypeContent->{$row->field}, 'action' => ($edit ? 'edit' : 'add'), 'view' => ($edit ? 'edit' : 'add'), 'options' => $row->details])
                                     @elseif ($row->type == 'relationship')
-
-                                        {{-- Validacion del Vendedor al add un nuevo Producto--}}:
-                                        @if ($row->display_name == "shops" && auth()->user()->hasRole('seller'))
-                                            {{ auth()->user()->shop->name ?? 'n/a' }}
-                                            <input type="hidden" name="shop_id" value="{{ auth()->user()->shop->id }}">
-                                        @else
-                                            @include('voyager::formfields.relationship', ['options' => $row->details])
-                                        @endif
-
+                                        {{-- Catálogo compartido: no forzar 'shop_id' del vendedor, mostrar campo relación normal (opcional) --}}
+                                        @include('voyager::formfields.relationship', ['options' => $row->details])
                                     @else
                                         {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
                                     @endif

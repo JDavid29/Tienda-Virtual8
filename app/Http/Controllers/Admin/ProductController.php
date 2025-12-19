@@ -61,17 +61,7 @@ class ProductController extends VoyagerBaseController
                 $query->{$dataType->scope}();
             }
 
-            // Filtrar por tienda del usuario vendedor, evitando null en shop
-            if (auth()->user()->hasRole('seller')) {
-                $shopId = optional(auth()->user()->shop)->id;
-                if ($shopId) {
-                    // Solo mostrar productos de la tienda del usuario logueado
-                    $query->where('shop_id', $shopId);
-                } else {
-                    // Si no tiene tienda asociada, no mostrar resultados
-                    $query->whereRaw('1=0');
-                }
-            }
+            // Ecommerce único: no limitar por tienda, catálogo compartido entre vendedores y admin
 
 
             // Use withTrashed() if model uses SoftDeletes and if toggle is selected

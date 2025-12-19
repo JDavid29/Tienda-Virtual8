@@ -24,32 +24,31 @@ class ProductPolicy
         }
     }
 
-    public function browse(User $user){
+    public function browse(User $user)
+    {
         return $user->hasRole('seller');
     }
 
-    public function read(User $user, Producto $producto){
-        if (empty($producto->shop)) {
-            return false;
-        }
-        return $user->id == $producto->shop->user_id;
+    public function read(User $user, Producto $producto)
+    {
+        // Catálogo compartido: permitir que vendedores lean cualquier producto
+        return $user->hasRole('seller');
     }
 
-    public function edit(User $user, Producto $producto){
-        if (empty($producto->shop)) {
-            return false;
-        }
-        return $user->id == $producto->shop->user_id;
+    public function edit(User $user, Producto $producto)
+    {
+        // Catálogo compartido: permitir que vendedores editen cualquier producto
+        return $user->hasRole('seller');
     }
 
-    public function add(User $user){
+    public function add(User $user)
+    {
         return $user->hasRole('seller'); //para agregar el user debe ser vendedor
     }
 
-    public function delete(User $user, Producto $producto){
-        if (empty($producto->shop)) {
-            return false;
-        }
-        return $user->id == $producto->shop->user_id;
+    public function delete(User $user, Producto $producto)
+    {
+        // Catálogo compartido: permitir que vendedores eliminen cualquier producto
+        return $user->hasRole('seller');
     }
 }
