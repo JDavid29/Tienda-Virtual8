@@ -18,10 +18,10 @@
                         <ul class="ht-menu">
                             @guest
                             <li>
-                                <a class="" href="/admin/login"><span>Iniciar Sesión</span></a> {{-- ✅ URL directa --}}
+                                <a class="" href="{{ route('login.client') }}"><span>Iniciar Sesión</span></a>
                             </li>
                             <li>
-                                <a class="" href="/admin/login"><span>Registrarse</span></a> {{-- ✅ URL directa --}}
+                                <a class="" href="{{ route('register') }}"><span>Registrarse</span></a>
                             </li>
                             @else
                                 <li>
@@ -208,27 +208,27 @@
 
                                 <li class="megamenu-holder"><a href="{{ route('shopleftsidebar') }}">Comercio</a>
                                     <ul class="megamenu hb-megamenu">
-                                        <li><a href="shop-left-sidebar.html">Shop Page Layout</a>
+                                        <li><a href="shop-left-sidebar.html">Categorias principales</a>
                                             <ul>
-                                                <li><a href="shop-3-column.html">Shop 3 Column</a></li>
-                                                <li><a href="shop-4-column.html">Shop 4 Column</a></li>
-                                                <li><a href="shop-left-sidebar.html">Shop Left Sidebar</a></li>
-                                                <li><a href="shop-right-sidebar.html">Shop Right Sidebar</a></li>
-                                                <li><a href="shop-list.html">Shop List</a></li>
-                                                <li><a href="shop-list-left-sidebar.html">Shop List Left Sidebar</a></li>
-                                                <li><a href="shop-list-right-sidebar.html">Shop List Right Sidebar</a></li>
+                                                <li><a href="shop-3-column.html">PORTATIL</a></li>
+                                                <li><a href="shop-4-column.html">LICENCIAS</a></li>
+                                                <li><a href="shop-left-sidebar.html">COMPONENTES</a></li>
+                                                <li><a href="shop-right-sidebar.html">PERIFERICOS</a></li>
+                                                <li><a href="shop-list.html">PANTALLAS</a></li>
+                                                <li><a href="shop-list-left-sidebar.html">ALMACENAMIENTOS</a></li>
+                                                <li><a href="shop-list-right-sidebar.html">ZONA GAMERS</a></li>
                                             </ul>
                                         </li>
                                     </ul>
                                 </li>
                                 <li class="dropdown-holder"><a href="{{ route('blogleftsidebar') }}">Blog</a>
                                     <ul class="hb-dropdown">
-                                        <li class="sub-dropdown-holder"><a href="blog-left-sidebar.html">Blog Grid View</a>
+                                        <li class="sub-dropdown-holder"><a href="blog-left-sidebar.html">Vista en cuadricula de Blogs</a>
                                             <ul class="hb-dropdown hb-sub-dropdown">
-                                                <li><a href="blog-2-column.html">Blog 2 Column</a></li>
-                                                <li><a href="blog-3-column.html">Blog 3 Column</a></li>
-                                                <li><a href="blog-left-sidebar.html">Grid Left Sidebar</a></li>
-                                                <li><a href="blog-right-sidebar.html">Grid Right Sidebar</a></li>
+                                                <li><a href="blog-2-column.html">De Audio</a></li>
+                                                <li><a href="blog-3-column.html">De Imagen</a></li>
+                                                <li><a href="blog-left-sidebar.html">De Galeria </a></li>
+                                                <li><a href="blog-right-sidebar.html">De Video</a></li>
                                             </ul>
                                         </li>
                                     </ul>

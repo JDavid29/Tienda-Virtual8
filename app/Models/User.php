@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-//use App\Models\Shop;
+use App\Models\Shop;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -43,8 +43,10 @@ class User extends \TCG\Voyager\Models\User
         'email_verified_at' => 'datetime',
     ];
 
-    public function shop(){ //aqui vamos a crear la relacion tienda
-        return $this->hasOne(Shop::class, 'user_id');
+    public function shops()
+    { //aqui vamos a crear la relacion tienda
+        return $this->belongsToMany(Shop::class, 'producto_venta', 'producto_id', 'venta_id')
+            ->withPivot('nombre');
     }
 
     public function resenas()

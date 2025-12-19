@@ -42,7 +42,7 @@ return [
     */
 
     'models' => [
-        //'namespace' => 'App\\Models\\',
+        'namespace' => 'App\\Models\\',
     ],
 
     /*
@@ -99,19 +99,19 @@ return [
         /*
          * Set whether or not the multilingual is supported by the BREAD input.
          */
-        'enabled' => false,
+        'enabled' => true,
 
         /*
          * Select default language
          */
-        'default' => 'en',
+        'default' => 'es',
 
         /*
          * Select languages that are supported.
          */
         'locales' => [
+            'es',
             'en',
-            //'pt',
         ],
     ],
 
@@ -126,6 +126,7 @@ return [
 
     'dashboard' => [
         // Add custom list items to navbar's dropdown
+        // mostrar panel del usuario en panel enlaces
         'navbar_items' => [
             'voyager::generic.profile' => [
                 'route'      => 'voyager.profile',
@@ -142,7 +143,7 @@ return [
                 'icon_class' => 'voyager-power',
             ],
         ],
-
+        // Añadir pequeños componentes interactivos (widgets) en un panel de control (dashboard)
         'widgets' => [
             'TCG\\Voyager\\Widgets\\UserDimmer',
             'TCG\\Voyager\\Widgets\\PostDimmer',
@@ -183,6 +184,7 @@ return [
     |
     */
 
+    // color de la plantilla voyager
     'primary_color' => '#22A7F0',
 
     'show_dev_tips' => true, // Show development tip "How To Use:" in Menu and Settings
@@ -192,6 +194,7 @@ return [
         //'css/custom.css',
     ],
 
+    // aplicar codigo javascrit
     'additional_js' => [
         //'js/custom.js',
     ],
@@ -211,13 +214,14 @@ return [
     'media' => [
         // The allowed mimetypes to be uploaded through the media-manager.
         // 'allowed_mimetypes' => '*', //All types can be uploaded
-        'allowed_mimetypes' => [
-          'image/jpeg',
-          'image/png',
-          'image/gif',
-          'image/bmp',
-          'video/mp4',
-        ],
+                'allowed_mimetypes' => [
+                    'image/jpeg',
+                    'image/png',
+                    'image/gif',
+                    'image/bmp',
+                    'video/mp4',
+                    'application/pdf',
+                ],
         //Path for media-manager. Relative to the filesystem.
         'path'                => '/',
         'show_folders'        => true,

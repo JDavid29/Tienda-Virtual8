@@ -80,7 +80,7 @@ return [
     |
     */
 
-    'locale' => 'en',
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'es_MX',
 
     /*
     |--------------------------------------------------------------------------
@@ -236,7 +236,7 @@ return [
 
         'PayPal' => Srmklive\PayPal\Facades\PayPal::class,
 
-         'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
+        'Cart' => Darryldecode\Cart\Facades\CartFacade::class,
 
     ],
 

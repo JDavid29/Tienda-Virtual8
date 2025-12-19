@@ -2,10 +2,11 @@
 
 namespace App\Http\Livewire\Shop\Cart;
 
+use Log;
+
 use Livewire\Component;
 
 use Illuminate\Support\Facades\Auth;
-
 use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 
@@ -96,7 +97,7 @@ class IndexComponent extends Component
             // emit debug info so the frontend can show something if needed
             // $this->emit('cartUpdateSuccess', ['id' => $itemId, 'quantity' => $quantity]);
         } catch (\Throwable $e) {
-            \Log::error('Cart update failed: ' . $e->getMessage(), ['itemId' => $itemId, 'quantity' => $quantity]);
+            Log::error('Cart update failed: ' . $e->getMessage(), ['itemId' => $itemId, 'quantity' => $quantity]);
             $this->emit('cartUpdateError', ['message' => 'Error updating cart']);
         }
     }

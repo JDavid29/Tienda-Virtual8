@@ -12,6 +12,9 @@ use App\Http\Livewire\Shop\CheckoutComponent;
 use App\Http\Livewire\Shop\RegisterComponent;
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Livewire\Shop\Cart\IndexComponent as CartIndexComponent;
+use App\Http\Controllers\Auth\RegisterController as ClientRegisterController;
+use App\Http\Controllers\Auth\LoginController as ClientLoginController;
+use TCG\Voyager\Facades\Voyager;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,16 +50,21 @@ Route::get('/smartphone', function () {
 })->name('smartphone');
 
 // RUTAS DE AUTENTICACIÓN CLIENTE
+// Mostrar formulario de registro dentro de la vista unificada login-client
 Route::get('/register', function () {
-    return view('auth.register-client');
+    return view('auth.login-client');
 })->name('register');
+// Procesar registro con el controlador Auth existente (evita duplicar código)
+Route::post('/register', [ClientRegisterController::class, 'register'])->name('register.submit');
 
 // RUTA DE LOGIN CLIENTE
 Route::get('/login-client', function () {
     return view('auth.login-client');
 })->name('login.client');
+// Procesar login con el controlador Auth existente
+Route::post('/login-client', [ClientLoginController::class, 'login'])->name('login.client.submit');
 
-Route::get('/verificar', function(){
+Route::get('/verificar', function () {
     if (!auth()->check()) {
         return redirect()->route('login.client')->with('info', 'Por favor inicia sesión o regístrate para continuar con el pago.');
     }
@@ -87,7 +95,7 @@ Route::get('/register-shop', RegisterComponent::class)->name('register.shop');
 
 // PRODUCTO NORMAL
 // Ruta para producto único que recibe el id del producto y lo pasa a la vista
-Route::get('/single-product/{id}', function($id){
+Route::get('/single-product/{id}', function ($id) {
     return view('ProductSingle.Single_Product', compact('id'));
 })->name('single-product');
 
@@ -122,13 +130,13 @@ Route::get('/about-us', function () {
 // Vista pública: resources/views/wishlist/index.blade.php (extiende layouts.toolbar)
 // Vista Livewire: resources/views/livewire/wishlist.blade.php (plantilla que renderiza el componente)
 // Nota: puedes llamar al componente desde cualquier Blade con: @livewire('wishlist')
-Route::get('/wishlist', function(){
+Route::get('/wishlist', function () {
     return view('wishlist.index');
 })->name('wishlist');
 
 // RUTA PARA CONTACTO
 //esta ruta se esta obviando en favor de la ruta con controlador y metodo store para soporte post
-Route::get('/contacto', function() {
+Route::get('/contacto', function () {
     return view('contacto.contacto');
 })->name('contacto');
 
@@ -141,15 +149,15 @@ Route::get('/contact', function () {
 })->name('contact');
 
 // Rutas de comercio electrónico
-Route::get('/shop3column', function(){
+Route::get('/shop3column', function () {
     return view('Shop.Shop3Column');
 })->name('shop3column');
 
-Route::get('/shop4column', function(){
+Route::get('/shop4column', function () {
     return view('Shop.Shop4Column');
 })->name('shop4column');
 
-Route::get('/faq', function(){
+Route::get('/faq', function () {
     return view('Faq.faq');
 })->name('faq');
 
@@ -171,7 +179,7 @@ Route::get('/category/accesorios', function () {
 })->name('category.accesorios');
 
 // RUTAS DE ADMINISTRACIÓN - CORREGIDAS
-Route::get('/admin/login', [LoginController::class, 'index'])->name('admin.login');// ✅ CORREGIDO
+Route::get('/admin/login', [LoginController::class, 'index'])->name('admin.login'); // ✅ CORREGIDO
 Route::post('/admin/login', [LoginController::class, 'postLogin'])->name('postlogin');
 
 // GRUPO DE RUTAS DE VOYAGER ADMIN
