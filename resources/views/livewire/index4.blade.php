@@ -766,9 +766,7 @@
                                                 <a href="{{ route('product.show', $prod->id) }}">
                                                     <img src="{{ $prod->cover_img ? asset('storage/'.$prod->cover_img) : asset('images/default.jpg') }}" alt="{{ $prod->nombre }}">
                                                 </a>
-                                                @if(!empty($prod->is_new))
-                                                    <span class="sticker">Nuevo</span>
-                                                @endif
+                                                @include('partials.product-new-sticker', ['p' => $prod])
                                             </div>
                                             <div class="product_desc">
                                                 <div class="product_desc_info">
