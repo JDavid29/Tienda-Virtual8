@@ -30,4 +30,17 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'stripe' => [
+        'key'    => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
+    ],
+
+    'binancepay' => [
+        'api_key'    => env('BINANCE_PAY_API_KEY', ''),
+        'api_secret' => env('BINANCE_PAY_API_SECRET', ''),
+        'env'        => env('BINANCE_PAY_ENV', 'sandbox'),
+        // sandbox y producción usan el mismo endpoint; diferencia es en las credenciales
+        'base_url'   => 'https://bpay.binanceapi.com',
+    ],
+
 ];

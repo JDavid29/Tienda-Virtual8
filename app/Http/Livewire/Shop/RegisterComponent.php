@@ -34,7 +34,7 @@ class RegisterComponent extends Component
         //enviar mensaje
 
         // redireccionar la ruta
-        return redirect()->route('shop.index');
+        return redirect()->route('list.product');
     }
 
 }

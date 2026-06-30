@@ -92,9 +92,13 @@
                                     <div class="price-box pt-20">
                                 <span class="new-price new-price-2">BOB {{ number_format($product->precio ?? 0, 2) }}</span>
                             </div>
+                            {{-- ⚠️  XSS ALMACENADO: {!! !!} renderiza HTML sin escapar desde la BD.
+                                 Un admin puede guardar <script>malicioso</script> en descripcion.
+                                 FIX: usar {{ }} si no se necesita HTML, o instalar HTMLPurifier
+                                 para sanear etiquetas antes de guardar/mostrar. --}}
                             <div class="product-desc">
                                 <p>
-                                    <span>{{ $product->descripcion ?? 'Sin descripción disponible.' }}</span>
+                                    <span>{!! $product->descripcion ?? 'Sin descripción disponible.' !!}</span>
                                 </p>
                             </div>
                             <div class="product-variants">
@@ -119,6 +123,16 @@
                                     </div>
                                     <button class="add-to-cart" type="submit">Añadir al carrito</button>
                                 </form>
+                                @php $stock = $product->cantidad ?? 0; @endphp
+                                @if($stock > 0)
+                                    <span style="display:inline-block;margin-top:8px;padding:4px 12px;background:#fff3cd;color:#856404;border:1px solid #ffc107;border-radius:20px;font-size:13px;font-weight:600;">
+                                        <i class="fa fa-exclamation-circle" style="margin-right:4px;"></i>Solo quedan {{ $stock }}
+                                    </span>
+                                @else
+                                    <span style="display:inline-block;margin-top:8px;padding:4px 12px;background:#f8d7da;color:#721c24;border:1px solid #f5c6cb;border-radius:20px;font-size:13px;font-weight:600;">
+                                        <i class="fa fa-times-circle" style="margin-right:4px;"></i>Sin stock
+                                    </span>
+                                @endif
                             </div>
                             <div class="product-additional-info pt-25">
                                 <a class="wishlist-btn" href="#" wire:click.prevent="addToWishlist"><i class="fa fa-heart-o"></i>Añadir a la lista de deseos</a>
@@ -184,7 +198,9 @@
             <div class="tab-content">
                 <div id="description" class="tab-pane active show" role="tabpanel">
                     <div class="product-description">
-                        <span>{!! nl2br(e($product->descripcion_larga ?? 'Sin descripción detallada disponible.')) !!}</span>
+                        {{-- ⚠️  XSS ALMACENADO: igual que descripcion, este campo acepta HTML crudo.
+                             FIX: sanear con HTMLPurifier o cambiar a {{ }} si no se usa HTML rico. --}}
+                        <div>{!! $product->descripcion_larga ?? 'Sin descripción detallada disponible.' !!}</div>
                     </div>
                 </div>
                 <div id="product-details" class="tab-pane" role="tabpanel">

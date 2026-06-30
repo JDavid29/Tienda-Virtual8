@@ -2,12 +2,13 @@
 
 namespace App\Http\Livewire;
 
+use Cart;
 use Livewire\Component;
 use App\Models\Producto;
-use Illuminate\Support\Facades\Auth;
 use App\Models\ListaDeDeseo;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Componente Livewire: Wishlist
@@ -61,7 +62,7 @@ class Wishlist extends Component
 
         try {
             // add to cart for current user session
-            \Cart::session(Auth::id())->add([
+            Cart::session(Auth::id())->add([
                 'id' => $producto->id,
                 'name' => $producto->nombre,
                 'price' => $producto->precio,
@@ -124,5 +125,4 @@ class Wishlist extends Component
             $this->items = collect();
         }
     }
-
 }

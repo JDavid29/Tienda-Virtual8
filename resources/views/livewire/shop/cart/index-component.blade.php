@@ -48,7 +48,7 @@
                                                 <img src="{{ asset('images/default.png') }}" width="70" alt="Imagen no disponible">
                                             @endif
                                         </td>
-                                        <td class="li-product-name"><a href="#">{{ $item["name"] }}</a></td>
+                                        <td class="li-product-name"><a href="#">{{ \Illuminate\Support\Str::limit($item['name'], 60, '...') }}</a></td>
                                         <td class="li-product-price"><span class="amount">Bs {{ number_format($item['price'], 2) }}</span></td>
                                         <td class="quantity">
                                             <label>Cantidad</label>

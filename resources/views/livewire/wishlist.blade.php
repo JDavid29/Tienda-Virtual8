@@ -42,11 +42,11 @@
                                         <td class="li-product-name"><a href="#">{{ $producto->nombre ?? 'Sin nombre' }}</a></td>
                                         <td class="li-product-price"><span class="amount">BOB {{ number_format($producto->precio ?? 0, 2) }}</span></td>
                                         <td class="li-product-stock-status">
-                                            @php $estado = (int) ($producto->estado ?? 0); @endphp
-                                            @if($estado >= 1)
-                                                <span class="in-stock">En stock</span>
+                                            @php $cantidad = (int) ($producto->cantidad ?? 0); @endphp
+                                            @if($cantidad > 0)
+                                                <span class="in-stock">En stock ({{ $cantidad }})</span>
                                             @else
-                                                <span class="out-stock">Fuera de stock</span>
+                                                <span class="out-stock">Fuera de stock (0)</span>
                                             @endif
                                         </td>
                                         <td class="li-product-add-cart">

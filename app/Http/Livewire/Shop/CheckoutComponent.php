@@ -89,7 +89,7 @@ class CheckoutComponent extends Component
 
         \Cart::session(auth()->id())->clear(); // limpiamos el carrito del usuario autenticado
 
-        return redirect()->route('shop.index');//->withMessage('Su pedido esta siendo procesado');
+        return redirect()->route('list.product');//->withMessage('Su pedido esta siendo procesado');
 
     }
 }

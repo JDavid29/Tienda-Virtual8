@@ -13,19 +13,18 @@
 </style>
 
 <script>
-    (function(){
-        function showToast(type, message){
+    function showToast(type, message, duration){
+            duration = duration || 3000;
             var container = document.getElementById('live-notify-container');
             if(!container) return;
             var toast = document.createElement('div');
             toast.className = 'lv-toast ' + (type === 'error' ? 'lv-toast-error' : 'lv-toast-success');
-            toast.innerHTML = '<strong>' + (type === 'error' ? 'Error' : 'Éxito') + '</strong><div class="lv-msg">' + (message || '') + '</div>';
+            var icon = type === 'error' ? '&#10060;' : '&#10003;';
+            toast.innerHTML = '<strong>' + icon + ' ' + (type === 'error' ? 'Error' : '¡Éxito!') + '</strong><div class="lv-msg">' + (message || '') + '</div>';
             container.appendChild(toast);
-            // force reflow then show
             void toast.offsetWidth;
             toast.classList.add('lv-toast-show');
-            // remove after timeout
-            setTimeout(function(){ toast.classList.remove('lv-toast-show'); setTimeout(function(){ try{ container.removeChild(toast); }catch(e){} }, 250); }, 3000);
+            setTimeout(function(){ toast.classList.remove('lv-toast-show'); setTimeout(function(){ try{ container.removeChild(toast); }catch(e){} }, 250); }, duration);
         }
 
         // globally listen to Livewire browser events named 'notify'
@@ -67,5 +66,21 @@
                 console.error('notify handler error', err);
             }
         });
-    })();
+
+    @if(session('success'))
+    document.addEventListener('DOMContentLoaded', function(){
+        showToast('success', @json(session('success')), 6000);
+    });
+    @endif
+    @if(session('error') && !session('message'))
+    document.addEventListener('DOMContentLoaded', function(){
+        showToast('error', @json(session('error')), 5000);
+    });
+    @endif
+
+    // Mensaje de éxito proveniente de PayPal Smart Buttons (via sessionStorage)
+    document.addEventListener('DOMContentLoaded', function(){
+        var msg = sessionStorage.getItem('paypal_success');
+        if (msg) { sessionStorage.removeItem('paypal_success'); showToast('success', msg, 6000); }
+    });
 </script>

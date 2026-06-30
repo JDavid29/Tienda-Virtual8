@@ -1,22 +1,11 @@
 <div>
-     {{-- para el icono se uso la version 5.0.0 --}}
-    <a href="{{ route('cart') }}" class="btn btn-primary">
+    <a href="{{ route('cart') }}" class="btn btn-primary position-relative">
         <i class="fas fa-shopping-cart"></i>
+        @if($cartCount > 0)
+            <span class="badge badge-danger position-absolute"
+                style="top:-6px;right:-6px;font-size:10px;padding:3px 6px;border-radius:50%;">
+                {{ $cartCount }}
+            </span>
+        @endif
     </a>
-    {{-- Validacion al agregar productos al carrito. Posible modificacion --}}
-    {{-- @auth
-        {{ \Cart::session(auth()->id())->getContent()->count() }} contamos los productos diferentes en el carrito
-        @else
-        0
-    @endauth --}}
-
-    @php
-        try {
-            $cartCount = auth()->check() ? \Cart::session(auth()->id())->getContent()->count() : \Cart::getContent()->count();
-        } catch (\Throwable $e) {
-            $cartCount = 0;
-        }
-    @endphp
-    {{ $cartCount }} {{-- contamos los productos diferentes en el carrito --}}
-    {{-- {{ \Cart::session(auth()->id())->getTotalQuantity() }} total de productos en el cart --}}
 </div>

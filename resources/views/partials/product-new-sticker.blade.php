@@ -1,5 +1,6 @@
 @php
     // Configurable recency window in days
+    // este parcial muestra una etiqueta "Nuevo" si el producto es reciente
     $recentDays = 14;
     $created = optional($p->created_at);
     $updated = optional($p->updated_at);

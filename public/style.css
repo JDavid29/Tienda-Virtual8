@@ -1739,21 +1739,35 @@ textarea:focus {
 }
 .hb-menu > nav > ul {
 		position: relative;
+		display: flex;
+		align-items: center;
+		justify-content: flex-start;
 }
 .hb-menu nav > ul > li {
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
 		position: relative;
-		padding-right: 40px;
+		padding: 0 20px;
 		transition: all 0.3s ease-in-out;
 }
+.hb-menu nav > ul > li:first-child {
+	padding-left: 0;
+}
+.hb-menu nav > ul > li:last-child {
+	padding-right: 0;
+}
 .hb-menu nav > ul > li > a {
-	display: flex;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
 	color: #242424;
 	text-transform: uppercase;
-	font-size: 14px;
-	line-height: 35px;
-	font-weight: 500;
-	padding: 8px 0;
+	font-size: 13.5px;
+	line-height: 1;
+	font-weight: 700;
+	padding: 16px 0;
+	letter-spacing: 0.6px;
+	white-space: nowrap;
 }
 .hb-menu-2 nav > ul > li > a {
 	display: flex;
@@ -1770,11 +1784,11 @@ textarea:focus {
 }
 .hb-menu nav > ul > li > a::after {
 	content: "\f107";
-	position: absolute;
-	top: 8px;
-	right: 15px;
+	position: static;
+	display: inline-block;
+	margin-left: 4px;
 	font-family: fontawesome;
-	font-size: 18px;
+	font-size: 13px;
 	transition: all 0.3s ease-in-out;
 	color: #242424;
 }
@@ -5434,3 +5448,82 @@ span.required {
 /*----------------------------------------------------------------------------------------------------*/
 /*------------------------------------------> The End <-----------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------*/
+
+/* ===== FIXES MINICART ===== */
+/* Elevar z-index del dropdown del carrito sobre el nice-select de sort */
+.minicart {
+    z-index: 9999 !important;
+}
+/* Evitar que el trigger se rompa en varias líneas con precios largos */
+.hm-minicart-trigger {
+    height: auto !important;
+    min-height: 45px;
+    display: flex !important;
+    align-items: center;
+    white-space: nowrap;
+}
+.item-text {
+    line-height: normal !important;
+    font-size: 13px;
+}
+/* Asegurar que el nice-select del sort quede debajo del minicart */
+.product-short .nice-select,
+.product-short .nice-select .list {
+    z-index: 99 !important;
+}
+
+/* ===== FIX MINICART ALIGNMENT ===== */
+.header-middle-right {
+    align-items: center !important;
+}
+.hm-minicart {
+    display: flex !important;
+    align-items: center;
+    height: 45px;
+}
+.hm-minicart-trigger {
+    display: flex !important;
+    align-items: center !important;
+    height: 45px !important;
+    min-height: 45px !important;
+    max-height: 45px !important;
+    padding: 0 15px 0 55px !important;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.item-text {
+    line-height: 1 !important;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.item-icon::before {
+    top: 50% !important;
+    transform: translateY(-50%);
+}
+
+/* ===== FIX CART BADGE VISIBILITY ===== */
+.hm-minicart-trigger {
+    overflow: visible !important;
+}
+.hm-minicart {
+    overflow: visible !important;
+}
+.cart-item-count {
+    top: -10px !important;
+    left: -12px !important;
+}
+
+/* ===== FIX CART BADGE POSITION - top left of icon ===== */
+.hm-minicart .cart-item-count {
+    top: -8px !important;
+    left: 28px !important;
+}
+
+/* ===== CART BADGE - esquina superior izquierda del icono ===== */
+.hm-minicart .cart-item-count {
+    top: -10px !important;
+    left: 18px !important;
+}

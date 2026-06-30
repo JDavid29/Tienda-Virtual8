@@ -2,7 +2,7 @@
 
 namespace App\Http\Livewire\Shop\Cart;
 
-use Log;
+use Illuminate\Support\Facades\Log;
 
 use Livewire\Component;
 

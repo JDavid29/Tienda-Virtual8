@@ -6,7 +6,8 @@ use App\Http\Livewire\ListProduct;
 use App\Http\Livewire\HomeComponent;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PaypalController;
-use App\Http\Livewire\Shop\IndexComponent;
+use App\Http\Controllers\StripeController;
+use App\Http\Controllers\BinancePayController;
 use App\Http\Controllers\ContactController;
 use App\Http\Livewire\Shop\CheckoutComponent;
 use App\Http\Livewire\Shop\RegisterComponent;
@@ -33,9 +34,6 @@ Route::get('/', HomeComponent::class)->name('home');
 // Ruta alternativa para "Inicio"
 Route::get('/inicio', HomeComponent::class)->name('inicio');
 
-// Ruta de tienda
-Route::get('/shop', IndexComponent::class)->name('shop.index');
-
 // Ruta de productos
 Route::get('/products', ListProduct::class)->name('list.product');
 
@@ -52,7 +50,7 @@ Route::get('/smartphone', function () {
 // RUTAS DE AUTENTICACIÓN CLIENTE
 // Mostrar formulario de registro dentro de la vista unificada login-client
 Route::get('/register', function () {
-    return view('auth.login-client');
+    return view('auth.register-client');
 })->name('register');
 // Procesar registro con el controlador Auth existente (evita duplicar código)
 Route::post('/register', [ClientRegisterController::class, 'register'])->name('register.submit');
@@ -81,14 +79,50 @@ Route::get('/checkout', function () {
 })->name('checkout');
 
 // RUTAS DE PAGO PAYPAL
-Route::get('/paypal/checkout/{order}', [PaypalController::class, 'getExpressCheckout'])
-    ->name('paypal.checkout');
+Route::middleware('auth')->group(function () {
+    // Página con Smart Buttons (PayPal + Tarjeta)
+    Route::get('/paypal/checkout/{order}', [PaypalController::class, 'getExpressCheckout'])
+        ->name('paypal.checkout');
 
-Route::get('/paypal-success/{order}', [PaypalController::class, 'getExpressCheckoutSuccess'])
-    ->name('paypal.success');
+    // API llamada desde el JS SDK: crea la orden en PayPal y devuelve el paypal_order_id
+    Route::post('/paypal/create-order/{order}', [PaypalController::class, 'createPaypalOrder'])
+        ->name('paypal.create.order');
+
+    // API llamada desde el JS SDK: captura el pago ya aprobado
+    Route::post('/paypal/capture/{paypalOrderId}/{order}', [PaypalController::class, 'capturePaypalOrder'])
+        ->name('paypal.capture.order');
+});
 
 Route::get('/paypal-cancel', [PaypalController::class, 'calcelPage'])
     ->name('paypal.cancel');
+
+// RUTAS DE PAGO STRIPE
+Route::middleware('auth')->group(function () {
+    Route::get('/stripe/checkout/{order}', [StripeController::class, 'checkout'])
+        ->name('stripe.checkout');
+    Route::get('/stripe/success/{order}', [StripeController::class, 'success'])
+        ->name('stripe.success');
+});
+Route::get('/stripe/cancel', [StripeController::class, 'cancel'])
+    ->name('stripe.cancel');
+
+// RUTAS DE PAGO BINANCE PAY (modo simulación)
+Route::middleware('auth')->group(function () {
+    Route::get('/binance/checkout/{order}', [BinancePayController::class, 'checkout'])
+        ->name('binance.checkout');
+    Route::get('/binance/query/{order}', [BinancePayController::class, 'queryStatus'])
+        ->name('binance.query');
+    Route::post('/binance/mock-approve/{order}', [BinancePayController::class, 'mockApprove'])
+        ->name('binance.mock.approve');
+    Route::post('/binance/mock-reject/{order}', [BinancePayController::class, 'mockReject'])
+        ->name('binance.mock.reject');
+});
+// Webhook (sin auth — llamado por Binance externamente)
+Route::post('/binance/webhook', [BinancePayController::class, 'webhook'])
+    ->name('binance.webhook');
+Route::get('/binance/cancel', function () {
+    return redirect()->route('checkout')->with('error', 'Pago con Binance Pay cancelado.');
+})->name('binance.cancel');
 
 // RUTA DE REGISTRO DE TIENDA
 Route::get('/register-shop', RegisterComponent::class)->name('register.shop');
@@ -131,6 +165,9 @@ Route::get('/about-us', function () {
 // Vista Livewire: resources/views/livewire/wishlist.blade.php (plantilla que renderiza el componente)
 // Nota: puedes llamar al componente desde cualquier Blade con: @livewire('wishlist')
 Route::get('/wishlist', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login.client')->with('info', 'Por favor inicia sesión para ver tu lista de deseos.');
+    }
     return view('wishlist.index');
 })->name('wishlist');
 
@@ -161,22 +198,28 @@ Route::get('/faq', function () {
     return view('Faq.faq');
 })->name('faq');
 
+// RUTA: Ofertas del Día
+Route::get('/ofertas', \App\Http\Livewire\OfertasComponent::class)->name('ofertas');
+
+// RUTA: Marcas / Proveedores
+Route::get('/marcas', \App\Http\Livewire\MarcasComponent::class)->name('marcas');
+
+// RUTA: Mi Cuenta (requiere autenticación)
+Route::get('/mi-cuenta', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login.client')->with('info', 'Inicia sesión para acceder a tu cuenta.');
+    }
+    return view('mi-cuenta.index');
+})->name('mi-cuenta');
+
 // RUTAS DE CATEGORÍAS
-Route::get('/category/portatiles', function () {
-    return view('categories.portatiles');
-})->name('category.portatiles');
+Route::get('/category/{slug}', \App\Http\Livewire\ListProduct::class)->name('category.show');
 
-Route::get('/category/smartphones', function () {
-    return view('categories.smartphones');
-})->name('category.smartphones');
-
-Route::get('/category/tablets', function () {
-    return view('categories.tablets');
-})->name('category.tablets');
-
-Route::get('/category/accesorios', function () {
-    return view('categories.accesorios');
-})->name('category.accesorios');
+// Aliases para el menú
+Route::get('/category/portatiles',  fn() => redirect()->route('category.show', 'portatil'))->name('category.portatiles');
+Route::get('/category/smartphones', fn() => redirect()->route('category.show', 'perifericos'))->name('category.smartphones');
+Route::get('/category/tablets',     fn() => redirect()->route('category.show', 'componentes'))->name('category.tablets');
+Route::get('/category/accesorios',  fn() => redirect()->route('category.show', 'accesorios'))->name('category.accesorios');
 
 // RUTAS DE ADMINISTRACIÓN - CORREGIDAS
 Route::get('/admin/login', [LoginController::class, 'index'])->name('admin.login'); // ✅ CORREGIDO

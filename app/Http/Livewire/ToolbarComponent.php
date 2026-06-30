@@ -89,6 +89,7 @@ class ToolbarComponent extends Component
 
     public function render()
     {
-        return view('livewire.toolbar-component');
+        $categories = \DB::table('categories')->orderBy('order')->get();
+        return view('livewire.toolbar-component', compact('categories'));
     }
 }

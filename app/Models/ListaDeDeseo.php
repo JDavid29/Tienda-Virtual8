@@ -11,12 +11,8 @@ class ListaDeDeseo extends Model
 
     protected $table = 'lista_de_deseos';
 
-    /**
-     * Si la tabla todavía no tiene columnas `created_at`/`updated_at`,
-     * desactivamos timestamps temporalmente para evitar errores
-     * hasta que se apliquen las migraciones.
-     */
-    public $timestamps = false;
+    // Usa timestamps para que Eloquent complete `created_at` y `updated_at`
+    public $timestamps = true;
 
     protected $fillable = [
         'user_id',

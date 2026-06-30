@@ -123,10 +123,11 @@
                             <!-- Begin Header Mini Cart Area -->
                             <li class="hm-minicart">
                                 <div class="hm-minicart-trigger">
-                                    <span class="item-icon"></span>
-                                    <span class="item-text">
-                                        BOB. {{ number_format($cartSubTotal, 2) }}
+                                    <span class="item-icon">
                                         <span class="cart-item-count">{{ $cartTotalQuantity }}</span>
+                                    </span>
+                                    <span class="item-text">
+                                        BOB.&nbsp;{{ number_format($cartSubTotal, 2) }}
                                     </span>
                                 </div>
                                 <div class="minicart">
@@ -138,7 +139,7 @@
                                         @else
                                             @foreach ($cartItems as $item)
                                                 <li>
-                                                    <a href="single-product.html" class="minicart-product-image">
+                                                    <a href="{{ route('single-product', $item['id']) }}" class="minicart-product-image">
                                                             @include('partials.product-image', [
                                                                 'image' => $item['attributes']['image'] ?? $item['attributes']['cover_img'] ?? null,
                                                                 'alt' => $item['name'] ?? 'cart products',
@@ -147,7 +148,7 @@
                                                             ])
                                                     </a>
                                                     <div class="minicart-product-details">
-                                                        <h6><a href="single-product.html">{{ $item['name'] }}</a></h6>
+                                                        <h6><a href="{{ route('single-product', $item['id']) }}">{{ \Illuminate\Support\Str::limit($item['name'], 60, '...') }}</a></h6>
                                                         <span>Bs. {{ number_format($item['price'], 2) }} x {{ $item['quantity'] }}</span>
                                                     </div>
                                                     <button wire:click="removeFromCart('{{ $item['id'] }}')" class="close" type="button">
@@ -184,81 +185,78 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    <!-- Begin Header Bottom Menu Area -->
                     <div class="hb-menu">
                         <nav>
                             <ul>
-                                {{-- inicio de la tienda en la barra de herramientas --}}
-                                <li><a href="{{ route('inicio') }}">Todo</a></li>
-                                {{-- fin de la tienda en la barra de herramientas --}}
-
-                                {{-- Hogar
-                                <li class="dropdown-holder"><a href="index.html">Home</a>
-                                    {{-- <ul class="hb-dropdown">
-                                        <li><a href="#">Accesorios</a></li>
-                                        <li><a href="#">SmartWatches</a></li>
-                                        <li><a href="index-3.html">Portatiles</a></li>
-                                        <li class="active"><a href="index-4.html">General</a></li>
-                                    </ul>
-                                </li> --}}
-
-                                {{-- Ofertas del dia --}}
-                                {{-- <li><a href="shop-left-sidebar.html">Ofertas del día</a></li> --}}
-                                {{-- Fin Ofertas del dia --}}
-
-                                <li class="megamenu-holder"><a href="{{ route('shopleftsidebar') }}">Comercio</a>
-                                    <ul class="megamenu hb-megamenu">
-                                        <li><a href="shop-left-sidebar.html">Categorias principales</a>
-                                            <ul>
-                                                <li><a href="shop-3-column.html">PORTATIL</a></li>
-                                                <li><a href="shop-4-column.html">LICENCIAS</a></li>
-                                                <li><a href="shop-left-sidebar.html">COMPONENTES</a></li>
-                                                <li><a href="shop-right-sidebar.html">PERIFERICOS</a></li>
-                                                <li><a href="shop-list.html">PANTALLAS</a></li>
-                                                <li><a href="shop-list-left-sidebar.html">ALMACENAMIENTOS</a></li>
-                                                <li><a href="shop-list-right-sidebar.html">ZONA GAMERS</a></li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                {{-- 1. Inicio --}}
+                                <li class="{{ request()->routeIs('inicio','home') ? 'active' : '' }}">
+                                    <a href="{{ route('inicio') }}">Inicio</a>
                                 </li>
-                                <li class="dropdown-holder"><a href="{{ route('blogleftsidebar') }}">Blog</a>
+
+                                {{-- 2. Tienda: catálogo con vistas --}}
+                                <li class="dropdown-holder {{ request()->routeIs('list.product','shopleftsidebar','shop3column','shop4column') ? 'active' : '' }}">
+                                    <a href="{{ route('list.product') }}">Tienda</a>
                                     <ul class="hb-dropdown">
-                                        <li class="sub-dropdown-holder"><a href="blog-left-sidebar.html">Vista en cuadricula de Blogs</a>
-                                            <ul class="hb-dropdown hb-sub-dropdown">
-                                                <li><a href="blog-2-column.html">De Audio</a></li>
-                                                <li><a href="blog-3-column.html">De Imagen</a></li>
-                                                <li><a href="blog-left-sidebar.html">De Galeria </a></li>
-                                                <li><a href="blog-right-sidebar.html">De Video</a></li>
-                                            </ul>
-                                        </li>
+                                        <li><a href="{{ route('list.product') }}">Todos los Productos</a></li>
+                                        <li><a href="{{ route('shopleftsidebar') }}">Vista con Filtros</a></li>
+                                        <li><a href="{{ route('shop3column') }}">Vista 3 Columnas</a></li>
+                                        <li><a href="{{ route('shop4column') }}">Vista 4 Columnas</a></li>
                                     </ul>
                                 </li>
-                                <li class="megamenu-static-holder"><a href="{{ route('compare') }}">Comparar</a>
-                                    <ul class="megamenu hb-megamenu">
-                                        <li><a href="blog-left-sidebar.html">Blog Layouts</a>
-                                            <ul>
-                                                <li><a href="blog-2-column.html">Blog 2 Column</a></li>
-                                                <li><a href="blog-3-column.html">Blog 3 Column</a></li>
-                                                <li><a href="blog-left-sidebar.html">Grid Left Sidebar</a></li>
-                                                <li><a href="blog-right-sidebar.html">Grid Right Sidebar</a></li>
-                                                <li><a href="blog-list.html">Blog List</a></li>
-                                                <li><a href="blog-list-left-sidebar.html">List Left Sidebar</a></li>
-                                                <li><a href="blog-list-right-sidebar.html">List Right Sidebar</a></li>
-                                            </ul>
-                                        </li>
+
+                                {{-- 3. Categorías dinámicas --}}
+                                <li class="dropdown-holder {{ request()->is('category/*') ? 'active' : '' }}">
+                                    <a href="#">Categorías</a>
+                                    <ul class="hb-dropdown">
+                                        @foreach($categories as $cat)
+                                            <li>
+                                                <a href="{{ route('category.show', $cat->slug) }}">
+                                                    {{ $cat->name }}
+                                                </a>
+                                            </li>
+                                        @endforeach
                                     </ul>
                                 </li>
-                                <li><a href="{{ route('about-us') }}">Sobre Nosotros</a></li>
-                                <li><a href="{{ route('contacto') }}">Contacto</a></li>
-                                <li><a href="{{ route('shop3column') }}">Reloj inteligente</a></li>
-                                <li><a href="{{ route('shop4column') }}">Accesorios</a></li>
-                                {{-- Servicio al Cliente --}}
-                                <li><a href="{{ route('faq') }}">Centro de ayuda</a></li>
-                                {{-- Fin Servicio al Cliente --}}
+
+                                {{-- 4. Ofertas del Día --}}
+                                <li class="{{ request()->routeIs('ofertas') ? 'active' : '' }}">
+                                    <a href="{{ route('ofertas') }}"
+                                       style="{{ request()->routeIs('ofertas') ? '' : 'color:#c0392b!important;' }}">
+                                        🏷️ Ofertas
+                                    </a>
+                                </li>
+
+                                {{-- 5. Marcas / Proveedores --}}
+                                <li class="{{ request()->routeIs('marcas') ? 'active' : '' }}">
+                                    <a href="{{ route('marcas') }}">Marcas</a>
+                                </li>
+
+                                {{-- 6. Comparar --}}
+                                <li class="{{ request()->routeIs('compare') ? 'active' : '' }}">
+                                    <a href="{{ route('compare') }}">Comparar</a>
+                                </li>
+
+                                {{-- 7. Blog --}}
+                                <li class="{{ request()->routeIs('blogleftsidebar') ? 'active' : '' }}">
+                                    <a href="{{ route('blogleftsidebar') }}">Blog</a>
+                                </li>
+
+                                {{-- 8. Mi Cuenta (solo autenticados) / Nosotros + Ayuda --}}
+                                <li class="dropdown-holder {{ request()->routeIs('about-us','faq','contacto','mi-cuenta') ? 'active' : '' }}">
+                                    <a href="#">Más</a>
+                                    <ul class="hb-dropdown">
+                                        @auth
+                                            <li><a href="{{ route('mi-cuenta') }}"><i class="fa fa-user-o"></i> &nbsp;Mi Cuenta</a></li>
+                                        @endauth
+                                        <li><a href="{{ route('about-us') }}">Sobre Nosotros</a></li>
+                                        <li><a href="{{ route('faq') }}">Preguntas Frecuentes</a></li>
+                                        <li><a href="{{ route('contacto') }}">Contacto</a></li>
+                                    </ul>
+                                </li>
+
                             </ul>
                         </nav>
                     </div>
-                    <!-- Header Bottom Menu Area End Here -->
                 </div>
             </div>
         </div>
@@ -270,6 +268,22 @@
         <div class="container">
             <div class="row">
                 <div class="mobile-menu">
+                    <nav id="mobile-menu-nav">
+                        <ul>
+                            <li><a href="{{ route('inicio') }}">Inicio</a></li>
+                            <li><a href="{{ route('list.product') }}">Productos</a></li>
+                            <li><a href="#">Categorías</a>
+                                <ul>
+                                    <li><a href="{{ route('category.portatiles') }}">Portátiles</a></li>
+                                    <li><a href="{{ route('category.smartphones') }}">Smartphones</a></li>
+                                    <li><a href="{{ route('category.tablets') }}">Tablets</a></li>
+                                    <li><a href="{{ route('category.accesorios') }}">Accesorios</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="{{ route('about-us') }}">Nosotros</a></li>
+                            <li><a href="{{ route('contacto') }}">Contacto</a></li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

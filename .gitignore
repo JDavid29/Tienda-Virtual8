@@ -13,3 +13,26 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+
+# ============================================================
+# ARCHIVOS SENSIBLES — NO SUBIR A REPOSITORIO PÚBLICO
+# ============================================================
+
+# Memoria interna de Claude Code (rutas, contexto de sesión, claves inferidas)
+.claude/
+
+# Wireframes y prototipos de desarrollo (pueden revelar lógica de negocio)
+public/wireframe-*.html
+
+# Archivos de log de Laravel (pueden contener datos de usuarios o tokens)
+storage/logs/*.log
+
+# Caché de configuración compilada (puede contener valores de .env en texto plano)
+bootstrap/cache/config.php
+bootstrap/cache/services.php
+bootstrap/cache/packages.php
+
+# Backups de base de datos si se guardan localmente
+*.sql
+*.sqlite
+database/*.sqlite

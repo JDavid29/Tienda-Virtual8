@@ -1,3 +1,25 @@
+<div>
+
+    <!-- Toast de confirmación -->
+    <div id="cart-toast" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;
+        background:#28a745;color:#fff;padding:12px 20px;border-radius:8px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.2);font-size:14px;min-width:200px;">
+        🛒 <span id="cart-toast-msg">Producto agregado</span>
+    </div>
+
+    @if(session('message'))
+        <div class="alert alert-success alert-dismissible text-center mb-0" role="alert" style="border-radius:0;">
+            {{ session('message') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible text-center mb-0" role="alert" style="border-radius:0;">
+            {{ session('error') }}
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+        </div>
+    @endif
+
 <div class="content-wraper pt-60 pb-60">
                 <div class="container">
                     <div class="row">
@@ -9,6 +31,12 @@
                                 </a>
                             </div>
                             Li's Banner Area End Here -->
+                            @if(!empty($categoryName))
+                                <h3 class="mt-30 mb-10" style="font-weight:700;border-left:4px solid #fed700;padding-left:12px;">
+                                    {{ $categoryName }}
+                                </h3>
+                            @endif
+
                             <!-- shop-top-bar start -->
                             <div class="shop-top-bar mt-30">
                                 <div class="shop-bar-inner">
@@ -52,7 +80,7 @@
                                                     <!-- single-product-wrap start -->
                                                     <div class="single-product-wrap">
                                                         <div class="product-image">
-                                                            <a href="single-product.html">
+                                                            <a href="{{ route('single-product', $producto->id) }}">
                                                                 @include('partials.product-image', [
                                                                     'image' => $producto->cover_img ?? null,
                                                                     'alt' => $producto->nombre ?? "Li's Product Image",
@@ -78,14 +106,20 @@
                                                                         </ul>
                                                                     </div>
                                                                 </div>
-                                                                <h4><a class="product_name" href="single-product.html">{{ $producto->nombre }}</a></h4>
+                                                                <h4><a class="product_name" href="{{ route('single-product', $producto->id) }}">{{ $producto->nombre }}</a></h4>
                                                                 <div class="price-box">
                                                                     <span class="new-price">BOB. {{ $producto->precio }}</span>
                                                                 </div>
                                                             </div>
                                                             <div class="add-actions">
                                                                 <ul class="add-actions-link">
-                                                                    <li class="add-cart active"><a href="#" wire:click.prevent="agregarCarrito({{ $producto->id }})" wire:target="agregarCarrito" role="button">Añadir</a></li>
+                                                                    <li class="add-cart active">
+                                                                        <a href="#"
+                                                                            wire:click.prevent="agregarCarrito({{ $producto->id }})"
+                                                                            role="button">
+                                                                            Añadir
+                                                                        </a>
+                                                                    </li>
                                                                     <li><a href="#" title="Vista rápida" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
                                                                     <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
                                                                 </ul>
@@ -103,8 +137,11 @@
                                     </div>
 
                                     <script>
-                                    window.addEventListener('cart-debug', e => {
-                                        console.log('CART_DEBUG', e.detail);
+                                    window.addEventListener('product-added', e => {
+                                        const toast = document.getElementById('cart-toast');
+                                        document.getElementById('cart-toast-msg').textContent = (e.detail.nombre || 'Producto') + ' agregado al carrito';
+                                        toast.style.display = 'block';
+                                        setTimeout(() => { toast.style.display = 'none'; }, 3000);
                                     });
                                     </script>
                                     <!-- Begin Li's Pagination Area -->
@@ -137,3 +174,5 @@
                     </div>
                 </div>
             </div>
+
+</div>{{-- fin raíz Livewire --}}

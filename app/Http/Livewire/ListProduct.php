@@ -11,13 +11,36 @@ class ListProduct extends Component
 {
     use WithPagination;
 
+    public $categoryId   = null;
+    public $categoryName = null;
+
+    public function mount($slug = null, $categoryId = null, $categoryName = null)
+    {
+        if ($slug) {
+            $category = \DB::table('categories')->where('slug', $slug)->first();
+            if ($category) {
+                $this->categoryId   = $category->id;
+                $this->categoryName = $category->name;
+            }
+        } else {
+            $this->categoryId   = $categoryId;
+            $this->categoryName = $categoryName;
+        }
+    }
+
     public function render()
     {
-        // retornar a la vista list-product.blade.php o los productos
-        $productos=Producto::all();
-        return view('livewire.list-product', [
-            'productos' => $productos,
+        $query = Producto::query();
 
+        if ($this->categoryId) {
+            $query->where('category_id', $this->categoryId);
+        }
+
+        $productos = $query->get();
+
+        return view('livewire.list-product', [
+            'productos'    => $productos,
+            'categoryName' => $this->categoryName,
         ])->extends("layouts.toolbar")->section("content");
     }
 
@@ -57,7 +80,8 @@ class ListProduct extends Component
             'items' => \Cart::getContent()->toArray(),
             'total' => \Cart::getTotal(),
             ]);*/
-            $this->emit('productAdded');
+            $this->emit('cartUpdated');
+            $this->dispatchBrowserEvent('product-added', ['nombre' => $producto->nombre]);
 
             session()->flash('message', 'Producto agregado al carrito exitosamente.');
         } else {

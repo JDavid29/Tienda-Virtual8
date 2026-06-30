@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire\Verificar;
 
-use Livewire\Component;
-use Darryldecode\Cart\Facades\CartFacade as Cart;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use App\Models\User;
-use Illuminate\Support\Facades\DB;
 use App\Models\Order;
+use Livewire\Component;
 use App\Models\Producto;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 
 class CheckoutComponent extends Component
 {
@@ -120,7 +121,7 @@ class CheckoutComponent extends Component
 
             $this->loginError = 'Credenciales inválidas. Verifique e intente nuevamente.';
         } catch (\Throwable $e) {
-            \Log::error('Login attempt failed: '.$e->getMessage());
+            Log::error('Login attempt failed: '.$e->getMessage());
             $this->loginError = 'Ocurrió un error al intentar iniciar sesión.';
         }
     }
@@ -137,23 +138,50 @@ class CheckoutComponent extends Component
         $this->login_password = '';
     }
 
+    protected $quickPayMethods = ['paypal', 'stripe', 'yape', 'binance'];
+
     public function rules()
     {
         return [
-            'billing_fullname' => 'required|string',
-            'billing_address' => 'required|string',
-            'billing_city' => 'required|string',
-            'billing_state' => 'required|string',
-            'billing_zipcode' => 'required|string',
-            'billing_phone' => 'required|string',
             'shipping_fullname' => 'required|string',
-            'shipping_address' => 'required|string',
-            'shipping_city' => 'required|string',
-            'shipping_state' => 'required|string',
-            'shipping_zipcode' => 'required|string',
-            'shipping_phone' => 'required|string',
-            'payment_method' => 'required|in:cash_on_delivery,paypal,stripe,card',
+            'shipping_address'  => 'required|string',
+            'shipping_city'     => 'required|string',
+            'shipping_state'    => 'required|string',
+            'shipping_zipcode'  => 'required|string',
+            'shipping_phone'    => 'required|string',
+            'payment_method'    => 'required|in:cash_on_delivery,paypal,stripe,yape,binance',
         ];
+    }
+
+    // Copia los datos de envío en los campos billing (misma dirección)
+    protected function syncBillingFromShipping()
+    {
+        $this->billing_fullname = $this->shipping_fullname;
+        $this->billing_address  = $this->shipping_address;
+        $this->billing_city     = $this->shipping_city;
+        $this->billing_state    = $this->shipping_state;
+        $this->billing_zipcode  = $this->shipping_zipcode;
+        $this->billing_phone    = $this->shipping_phone;
+    }
+
+    protected function fillRandomDataForPaypal()
+    {
+        $user = auth()->user();
+        $rand = rand(1000, 9999);
+
+        $this->billing_fullname  = $this->billing_fullname  ?: ($user->name ?? 'Cliente PayPal');
+        $this->billing_address   = $this->billing_address   ?: 'Av. Principal #' . $rand;
+        $this->billing_city      = $this->billing_city      ?: 'La Paz';
+        $this->billing_state     = $this->billing_state     ?: 'La Paz';
+        $this->billing_zipcode   = $this->billing_zipcode   ?: '0' . $rand;
+        $this->billing_phone     = $this->billing_phone     ?: '+591 7' . $rand . $rand;
+
+        $this->shipping_fullname = $this->billing_fullname;
+        $this->shipping_address  = $this->billing_address;
+        $this->shipping_city     = $this->billing_city;
+        $this->shipping_state    = $this->billing_state;
+        $this->shipping_zipcode  = $this->billing_zipcode;
+        $this->shipping_phone    = $this->billing_phone;
     }
 
     public function placeOrder()
@@ -166,6 +194,23 @@ class CheckoutComponent extends Component
         }
 
         $this->validate();
+
+        // Contra entrega solo disponible dentro de Yacuiba
+        if ($this->payment_method === 'cash_on_delivery') {
+            $city = mb_strtolower(trim($this->shipping_city));
+            if (! str_contains($city, 'yacuiba')) {
+                $this->orderError = 'El método "Contra entrega" solo está disponible para entregas dentro de Yacuiba.';
+                return;
+            }
+        }
+
+        // Billing siempre igual al shipping (formulario unificado)
+        $this->syncBillingFromShipping();
+
+        // Para PayPal/Stripe rellena campos vacíos con datos de respaldo
+        if (in_array($this->payment_method, $this->quickPayMethods)) {
+            $this->fillRandomDataForPaypal();
+        }
 
         // get cart totals and items
         $userId = auth()->id();
@@ -225,22 +270,37 @@ class CheckoutComponent extends Component
                 ]);
             }
 
-            // clear cart for user
+            DB::commit();
+
+            // Para PayPal o Stripe: redirigir sin vaciar carrito (se vacía al confirmar pago)
+            if ($this->payment_method === 'paypal') {
+                return $this->redirect(route('paypal.checkout', $order->id));
+            }
+
+            if ($this->payment_method === 'stripe') {
+                return $this->redirect(route('stripe.checkout', $order->id));
+            }
+
+            // Para otros métodos: vaciar carrito aquí
             if ($userId) {
                 Cart::session($userId)->clear();
             } else {
                 Cart::clear();
             }
 
-            DB::commit();
-
-            $this->orderSuccess = 'Pedido creado correctamente y está pendiente. Número de pedido: ' . $order->order_number;
+            if ($this->payment_method === 'binance') {
+                $this->orderSuccess = '¡Pedido #' . $order->order_number . ' registrado! Ahora realiza el pago con Binance Pay y envía el comprobante por WhatsApp al +591 70547372.';
+            } elseif ($this->payment_method === 'yape') {
+                $this->orderSuccess = '¡Pedido #' . $order->order_number . ' registrado! Yapea el monto indicado y envía el comprobante por WhatsApp al +591 70547372.';
+            } else {
+                $this->orderSuccess = '¡Pedido #' . $order->order_number . ' registrado! Está pendiente de confirmación.';
+            }
             // refresh cart and totals
             $this->updateCart();
             $this->emit('cartUpdated');
         } catch (\Throwable $e) {
             DB::rollBack();
-            \Log::error('Place order failed: ' . $e->getMessage());
+            Log::error('Place order failed: ' . $e->getMessage());
             $this->orderError = 'Ocurrió un error al crear el pedido. Intenta de nuevo.';
         }
     }

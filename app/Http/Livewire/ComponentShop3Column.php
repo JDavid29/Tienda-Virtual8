@@ -2,13 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use Darryldecode\Cart\Facades\CartFacade as Cart;
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Producto;
 use App\Models\ListaDeDeseo;
+use Livewire\WithPagination;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ComponentShop3Column extends Component
 {
@@ -58,7 +59,7 @@ class ComponentShop3Column extends Component
 
         try {
             if (Auth::check()) {
-                \Cart::session(Auth::id())->add([
+                Cart::session(Auth::id())->add([
                     'id' => $producto->id,
                     'name' => $producto->nombre,
                     'price' => $producto->precio,
@@ -67,7 +68,7 @@ class ComponentShop3Column extends Component
                     'associatedModel' => $producto,
                 ]);
             } else {
-                \Cart::add([
+                Cart::add([
                     'id' => $producto->id,
                     'name' => $producto->nombre,
                     'price' => $producto->precio,

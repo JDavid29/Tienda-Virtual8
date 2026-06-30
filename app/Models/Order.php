@@ -30,6 +30,10 @@ class Order extends Model
         'billing_zipcode',
         'billing_phone',
         'total',
+        'paypal_order_id',
+        'stripe_session_id',
+        'binance_order_id',
+        'binance_prepay_id',
     ];
 
     public function items(){

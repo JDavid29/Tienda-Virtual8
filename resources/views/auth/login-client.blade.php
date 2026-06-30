@@ -1,101 +1,183 @@
 @extends('layouts.toolbar')
 @section('content')
-<div class="page-section mb-60">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6 mb-30">
-                <!-- Formulario de Inicio de Sesión -->
-                <form method="POST" action="{{ route('login.client.submit') }}">
-                    @csrf
-                    <div class="login-form" style="border: 1px solid #ddd; padding: 20px; border-radius: 6px;">
-                        <div class="mb-15">
-                            <span class="li-button li-button-dark li-button-sm" style="display:inline-block">
-                                <i class="fa fa-sign-in"></i> Área de inicio de sesión
-                            </span>
-                        </div>
-                        <h4 class="login-title"><i class="fa fa-user"></i> Iniciar sesión</h4>
-                        <div class="row">
-                            <div class="col-md-12 col-12 mb-20">
-                                <label>Correo electrónico*</label>
-                                <input class="mb-0" type="email" name="email" value="{{ old('email') }}" placeholder="Correo electrónico" required autofocus>
-                                @error('email')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                            <div class="col-12 mb-20">
-                                <label>Contraseña</label>
-                                <input class="mb-0" type="password" name="password" placeholder="Contraseña" required>
-                                @error('password')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-                            <div class="col-md-8">
-                                <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
-                                    <input type="checkbox" id="remember_me" name="remember">
-                                    <label for="remember_me">Recuérdame</label>
-                                </div>
-                            </div>
-                            <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
-                                <a href="#">¿Olvidaste tu contraseña?</a>
-                            </div>
-                            <div class="col-md-12">
-                                <button type="submit" class="register-button li-button li-button-dark li-button-fullwidth mt-0">Iniciar sesión</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+
+<style>
+.auth-wrapper {
+    background: #f7f7f7;
+    padding: 60px 15px;
+    min-height: 80vh;
+}
+.auth-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+    max-width: 440px;
+    margin: 0 auto;
+}
+.auth-card-header {
+    background: #242424;
+    padding: 32px 40px 24px;
+    text-align: center;
+    border-radius: 12px 12px 0 0;
+}
+.auth-icon {
+    width: 64px;
+    height: 64px;
+    background: #fed700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+}
+.auth-icon i { font-size: 28px; color: #242424; }
+.auth-card-header h2 { color: #fff; font-size: 24px; font-weight: 700; margin: 0 0 4px; }
+.auth-card-header p  { color: #999; font-size: 13px; margin: 0; }
+.auth-card-body { padding: 32px 40px 36px; }
+
+.auth-field { margin-bottom: 20px; }
+.auth-field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.auth-input-wrap { position: relative; }
+.auth-input-wrap i {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #bbb;
+    font-size: 14px;
+    pointer-events: none;
+}
+.auth-input-wrap input {
+    display: block;
+    width: 100%;
+    border: 1.5px solid #e2e2e2;
+    border-radius: 7px;
+    padding: 11px 14px 11px 40px;
+    font-size: 14px;
+    color: #333;
+    background: #fafafa;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    box-sizing: border-box;
+}
+.auth-input-wrap input:focus {
+    border-color: #fed700;
+    box-shadow: 0 0 0 3px rgba(254,215,0,0.18);
+    background: #fff;
+}
+.auth-field .text-danger { font-size: 12px; margin-top: 4px; display: block; }
+
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+    font-size: 13px;
+    color: #666;
+}
+.auth-options a { color: #555; font-size: 13px; }
+.auth-options a:hover { color: #fed700; }
+.auth-options label { margin: 0; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+
+.auth-btn {
+    display: block;
+    width: 100%;
+    background: #242424;
+    color: #fff;
+    border: none;
+    border-radius: 7px;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+    text-align: center;
+}
+.auth-btn:hover { background: #fed700; color: #242424; }
+
+.auth-footer {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 14px;
+    color: #888;
+}
+.auth-footer a {
+    color: #242424;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 2px solid #fed700;
+}
+.auth-footer a:hover { color: #fed700; }
+</style>
+
+<div class="auth-wrapper">
+
+    @if(session('info'))
+        <div class="alert alert-info" style="max-width:440px;margin:0 auto 20px;">{{ session('info') }}</div>
+    @endif
+    @if(session('success'))
+        <div class="alert alert-success" style="max-width:440px;margin:0 auto 20px;">{{ session('success') }}</div>
+    @endif
+
+    <div class="auth-card">
+        <div class="auth-card-header">
+            <div class="auth-icon">
+                <i class="fa fa-user"></i>
             </div>
-            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
-                <form method="POST" action="{{ route('register.submit') }}">
-                    @csrf
-                    <div class="login-form" style="border: 1px solid #4a90e2; padding: 20px; border-radius: 6px;">
-                        <div class="mb-15">
-                            <span class="li-button li-button-sm" style="display:inline-block">
-                                <i class="fa fa-user-plus"></i> Área de registro de usuario
-                            </span>
-                        </div>
-                        <h4 class="login-title"><i class="fa fa-id-card"></i> Registrarse</h4>
-                        <div class="row">
-                            <div class="col-md-6 col-12 mb-20">
-                                <label>Nombre</label>
-                                <input class="mb-0" type="text" name="name" value="{{ old('name') }}" placeholder="Nombre" required>
-                            </div>
-                            <div class="col-md-6 col-12 mb-20">
-                                <label>Apellido</label>
-                                <input class="mb-0" type="text" name="last_name" placeholder="Apellido" required>
-                            </div>
-                            {{-- telefono y nacimiento --}}
-                            <div class="col-md-6 col-12 mb-20">
-                                <label>Teléfono</label>
-                                <input class="mb-0" type="tel" name="phone" placeholder="Teléfono" pattern="[0-9]{10,15}" required>
-                                <small>Formato: 10 a 15 dígitos, solo números.</small>
-                            </div>
-                            <div class="col-md-6 col-12 mb-20">
-                                <label>Fecha de Nacimiento</label>
-                                <input class="mb-0" type="date" name="birthdate" placeholder="Fecha de Nacimiento" required>
-                                <small>Selecciona tu fecha de nacimiento.</small>
-                            </div>
-                            {{-- fin telefono y nacimiento --}}
-                            <div class="col-md-12 mb-20">
-                                <label>Correo electrónico*</label>
-                                <input class="mb-0" type="email" name="email" value="{{ old('email') }}" placeholder="Correo electrónico" required>
-                            </div>
-                            <div class="col-md-6 mb-20">
-                                <label>Contraseña</label>
-                                <input class="mb-0" type="password" name="password" placeholder="Contraseña" required>
-                            </div>
-                            <div class="col-md-6 mb-20">
-                                <label>Confirmar contraseña</label>
-                                <input class="mb-0" type="password" name="password_confirmation" placeholder="Confirmar contraseña" required>
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="register-button li-button li-button-fullwidth mt-0">Registrarse</button>
-                            </div>
-                        </div>
+            <h2>Bienvenido</h2>
+            <p>Inicia sesión para continuar</p>
+        </div>
+
+        <div class="auth-card-body">
+            <form method="POST" action="{{ route('login.client.submit') }}">
+                @csrf
+
+                <div class="auth-field">
+                    <label>Correo electrónico</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa fa-envelope"></i>
+                        <input type="email" name="email" value="{{ old('email') }}"
+                               placeholder="correo@ejemplo.com" required autofocus>
                     </div>
-                </form>
+                    @error('email')<span class="text-danger">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="auth-field">
+                    <label>Contraseña</label>
+                    <div class="auth-input-wrap">
+                        <i class="fa fa-lock"></i>
+                        <input type="password" name="password" placeholder="••••••••" required>
+                    </div>
+                    @error('password')<span class="text-danger">{{ $message }}</span>@enderror
+                </div>
+
+                <div class="auth-options">
+                    <label>
+                        <input type="checkbox" name="remember">
+                        Recuérdame
+                    </label>
+                    <a href="#">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" class="auth-btn">
+                    <i class="fa fa-sign-in" style="margin-right:6px;"></i> Iniciar sesión
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                ¿No tienes cuenta? <a href="{{ route('register') }}">Regístrate aquí</a>
             </div>
         </div>
     </div>
+
 </div>
 @endsection

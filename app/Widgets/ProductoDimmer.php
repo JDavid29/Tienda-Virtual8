@@ -26,12 +26,14 @@ class ProductoDimmer extends BaseDimmer
         $inactivePct = 100 - $activePct;
 
         $text = sprintf(
-            '<div>Activos: <strong>%d</strong> • Inactivos: <strong>%d</strong></div>' .
-                '<div style="margin-top:8px;height:8px;background:#eee;border-radius:4px;overflow:hidden">' .
-                '<div style="width:%d%%;height:100%%;background:#28a745;float:left"></div>' .
-                '<div style="width:%d%%;height:100%%;background:#dc3545;float:left"></div>' .
-                '</div>' .
-                '<small style="display:block;margin-top:6px">%d%% activos de %d productos</small>',
+            '<div style="color:#fff">'
+                . '<div>Activos: <strong>%d</strong> • Inactivos: <strong>%d</strong></div>'
+                . '<div style="margin-top:8px;height:8px;background:#eee;border-radius:4px;overflow:hidden">'
+                . '<div style="width:%d%%;height:100%%;background:#28a745;float:left"></div>'
+                . '<div style="width:%d%%;height:100%%;background:#dc3545;float:left"></div>'
+                . '</div>'
+                . '<small style="display:block;margin-top:6px">%d%% activos de %d productos</small>'
+                . '</div>',
             $active,
             $inactive,
             $activePct,
