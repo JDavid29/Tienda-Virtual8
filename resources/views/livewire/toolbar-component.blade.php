@@ -81,8 +81,8 @@
                 <!-- Begin Header Logo Area -->
                 <div class="col-lg-3">
                     <div class="logo pb-sm-30 pb-xs-30">
-                        <a href="index.html">
-                            <img src="{{ asset('images/menu/logo/2.JPG') }}" alt="">
+                        <a href="{{ route('inicio') }}">
+                            <img src="{{ asset('images/menu/logo/nlg-logo.jpg') }}" alt="NextLevelGamer" width="188" height="45">
                         </a>
                     </div>
                 </div>

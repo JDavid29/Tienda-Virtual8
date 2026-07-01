@@ -1,77 +1,164 @@
 <div>
 
-    {{-- ===================== SLIDER ===================== --}}
+    {{-- ══════════════════════════════════════════════════════════════
+         SECCIÓN: SLIDER CON BANNERS LATERALES
+         Componente Livewire: Inicio
+         CSS de mejoras: public/css/pages/slider.css
+         Estilos base:    public/style.css (sección 2.2 Slider)
+
+         MEJORAS IMPLEMENTADAS (ver slider.css para el detalle CSS):
+           1. Animaciones de entrada: se alterna animation-style-01 y
+              animation-style-02 en cada slide para activar los
+              keyframes zoomInRight / zoomInUp ya definidos en style.css.
+           2. Badge "NUEVO" sobre la imagen del producto (.slider-product-badge).
+           3. Descripción corta del producto entre el precio y el CTA.
+           4. Dots de navegación Owl Carousel visibles (override CSS).
+           5. Banners laterales como mini-cards con nombre y precio.
+           6. Estado vacío mejorado con fondo de marca y CTA destacado.
+         ══════════════════════════════════════════════════════════════ --}}
     <div class="slider-with-banner">
         <div class="container">
             <div class="row">
+
+                {{-- ── Columna principal del slider (8/12) ─────────── --}}
                 <div class="col-lg-8 col-md-12">
                     <div class="slider-area pt-sm-30 pt-xs-30">
                         <div class="slider-active owl-carousel">
-                            @forelse($sliderProducts as $prod)
-                                <div class="single-slide align-center-left">
+
+                            @forelse($sliderProducts->take(3) as $index => $prod)
+                                {{--
+                                    MEJORA 1 — Animaciones de entrada
+                                    Se alterna animation-style-01 (zoomInRight) y
+                                    animation-style-02 (zoomInUp) en slides pares/impares
+                                    para dar variedad visual sin repetición.
+                                --}}
+                                <div class="single-slide align-center-left {{ $index % 2 === 0 ? 'animation-style-01' : 'animation-style-02' }}">
+
+                                    {{-- Barra de progreso animada (ya existía en style.css) --}}
                                     <div class="slider-progress"></div>
+
+                                    {{-- Contenido textual del slide --}}
                                     <div class="slider-content">
                                         <h5>Nueva Llegada <span>— Esta semana</span></h5>
                                         <h2>{{ Str::limit($prod->nombre, 50) }}</h2>
                                         <h3>Desde <span>Bs{{ number_format($prod->precio, 2) }}</span></h3>
+
+                                        {{--
+                                            MEJORA 3 — Descripción corta del producto
+                                            Ocupa el espacio vacío de 64px que dejaba el margen
+                                            inferior de h3. Se limita a 90 chars para no desbordar.
+                                            Solo se muestra si el producto tiene descripción.
+                                        --}}
+                                        @if(!empty($prod->descripcion))
+                                            <p class="slider-desc">{{ Str::limit($prod->descripcion, 90) }}</p>
+                                        @endif
+
                                         <div class="default-btn slide-btn">
-                                            <a class="links" href="{{ route('single-product', $prod->id) }}">Ver producto</a>
+                                            <a class="links" href="{{ route('single-product', $prod->id) }}">
+                                                Ver producto
+                                            </a>
                                         </div>
                                     </div>
+
+                                    {{--
+                                        MEJORA 2 — Badge "NUEVO" sobre la imagen
+                                        Va dentro de .single-slide (position:relative vía slider.css),
+                                        NO dentro de .slider-thumb para no romper el layout del template.
+                                        Se posiciona en la esquina superior derecha del área de imagen.
+                                    --}}
+                                    <span class="slider-product-badge">Nuevo</span>
                                     <div class="slider-thumb">
                                         @include('partials.product-image', [
-                                            'image'         => $prod->cover_img ?? null,
-                                            'alt'           => $prod->nombre,
-                                            'default'       => 'images/default.jpg',
-                                            'attributesHtml'=> 'style="max-height:260px;object-fit:contain;"'
+                                            'image'          => $prod->cover_img ?? null,
+                                            'alt'            => $prod->nombre,
+                                            'default'        => 'images/default.png',
+                                            'attributesHtml' => 'style="max-height:260px;object-fit:contain;"',
                                         ])
                                     </div>
+
                                 </div>
                             @empty
+                                {{--
+                                    MEJORA 6 — Estado vacío mejorado
+                                    Reemplaza el slide de texto plano anterior.
+                                    Fondo oscuro heredado del .single-slide + clase
+                                    .slider-empty-state para centrar y estilizar el contenido.
+                                --}}
                                 <div class="single-slide align-center-left">
-                                    <div class="slider-content">
-                                        <h5>Bienvenido a <span>nuestra tienda</span></h5>
-                                        <h2>Los mejores productos</h2>
-                                        <div class="default-btn slide-btn">
-                                            <a class="links" href="{{ route('list.product') }}">Ver catálogo</a>
-                                        </div>
+                                    <div class="slider-empty-state">
+                                        <span class="empty-badge">Tienda Virtual</span>
+                                        <h2>Los mejores productos, al mejor precio</h2>
+                                        <p>Explora el catálogo y encuentra lo que necesitas.</p>
+                                        <a class="empty-cta" href="{{ route('list.product') }}">
+                                            Ver catálogo
+                                        </a>
                                     </div>
                                 </div>
                             @endforelse
+
                         </div>
+                        {{--
+                            MEJORA 4 — Dots de navegación
+                            Owl Carousel genera los dots automáticamente.
+                            El CSS en slider.css sobreescribe el display:none
+                            que tenía .slider-active .owl-dots en style.css.
+                        --}}
                     </div>
                 </div>
 
-                {{-- Banners laterales con últimos 2 productos --}}
+                {{-- ── Columna de banners laterales (4/12) ─────────── --}}
                 <div class="col-lg-4 col-md-12 text-center pt-sm-30 pt-xs-30">
+
+                    {{--
+                        MEJORA 5 — Banners laterales como mini-cards
+                        Antes: solo imagen sin contexto.
+                        Ahora: imagen con overlay inferior que muestra
+                        nombre (truncado) y precio del producto.
+                        Ver clases .li-banner-card y .banner-info en slider.css.
+                    --}}
                     @foreach($sliderProducts->skip(3)->take(2) as $bp)
                         <div class="li-banner mb-15">
-                            <a href="{{ route('single-product', $bp->id) }}">
+                            <a class="li-banner-card" href="{{ route('single-product', $bp->id) }}">
                                 @include('partials.product-image', [
-                                    'image'         => $bp->cover_img ?? null,
-                                    'alt'           => $bp->nombre,
-                                    'default'       => 'images/banner/1_1.jpg',
-                                    'attributesHtml'=> 'style="width:100%;height:160px;object-fit:cover;"'
+                                    'image'          => $bp->cover_img ?? null,
+                                    'alt'            => $bp->nombre,
+                                    'default'        => 'images/banner/1_1.jpg',
+                                    'attributesHtml' => '',
                                 ])
+                                <div class="banner-info">
+                                    <span class="banner-name">{{ Str::limit($bp->nombre, 35) }}</span>
+                                    <span class="banner-price">Bs {{ number_format($bp->precio, 2) }}</span>
+                                </div>
                             </a>
                         </div>
                     @endforeach
+
+                    {{-- Fallback: imágenes estáticas si no hay suficientes productos --}}
                     @if($sliderProducts->count() < 4)
                         <div class="li-banner mb-15">
-                            <a href="{{ route('list.product') }}">
-                                <img src="{{ asset('images/banner/1_1.jpg') }}" alt="Catálogo" style="width:100%;">
+                            <a class="li-banner-card" href="{{ route('list.product') }}">
+                                <img src="{{ asset('images/banner/1_1.jpg') }}" alt="Catálogo">
+                                <div class="banner-info">
+                                    <span class="banner-name">Ver catálogo completo</span>
+                                </div>
                             </a>
                         </div>
                         <div class="li-banner">
-                            <a href="{{ route('list.product') }}">
-                                <img src="{{ asset('images/banner/1_2.jpg') }}" alt="Ofertas" style="width:100%;">
+                            <a class="li-banner-card" href="{{ route('list.product') }}">
+                                <img src="{{ asset('images/banner/1_2.jpg') }}" alt="Ofertas">
+                                <div class="banner-info">
+                                    <span class="banner-name">Ofertas de la semana</span>
+                                </div>
                             </a>
                         </div>
                     @endif
+
                 </div>
             </div>
         </div>
     </div>
+    {{-- ══════════════ FIN SLIDER CON BANNERS LATERALES ══════════════ --}}
+
 
     {{-- ===================== BANDA PROMO ===================== --}}
     <div class="static-top-wrap">
@@ -186,7 +273,7 @@
         </div>
     </div>
 
-    {{-- Toast confirmación --}}
+    {{-- Toast confirmación de carrito --}}
     <div id="home-toast" style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;
         background:#28a745;color:#fff;padding:12px 20px;border-radius:8px;
         box-shadow:0 4px 12px rgba(0,0,0,0.2);font-size:14px;">

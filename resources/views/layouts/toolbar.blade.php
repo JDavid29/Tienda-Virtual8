@@ -44,6 +44,7 @@
     <!-- Modernizr js -->
     <script src="{{ asset('js/vendor/modernizr-2.8.3.min.js') }}"></script>
     @livewireStyles
+    @stack('styles')
 </head>
 
 <body>
