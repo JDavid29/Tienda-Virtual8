@@ -231,6 +231,14 @@ Route::group(['prefix' => 'admin'], function () {
 
     // override/replace Voyager's admin register route to render HomeComponent
     Route::post('logout', [LoginController::class, 'logout'])->name('voyager.logout');
+
+    // Edición rápida de stock inline desde el listado de productos
+    Route::post('productos/{id}/stock', [\App\Http\Controllers\Admin\ProductoStockController::class, 'update'])
+        ->name('admin.productos.stock');
+
+    // Búsqueda global del panel admin (navbar)
+    Route::get('search', [\App\Http\Controllers\Admin\AdminSearchController::class, 'search'])
+        ->name('admin.search');
 });
 
 // RUTA FALLBACK y vista 404 temporalmente deshabilitadas mientras se trabaja en el proyecto.

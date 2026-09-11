@@ -30,5 +30,13 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsTableSeeder::class);
         $this->call(ShopSeeder::class);
         $this->call(ProductoSeeder::class);
+
+        // ── BREAD personalizado del panel admin (Voyager) ──────────────
+        // Registran data_types/data_rows/permisos/menú para productos y proveedores.
+        $this->call(ProveedoresBreadSeeder::class);
+        $this->call(ProductosBreadSeeder::class);
+
+        // Datos de ejemplo de proveedores + asignación a productos
+        $this->call(ProveedoresSeeder::class);
     }
 }

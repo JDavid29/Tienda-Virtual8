@@ -42,28 +42,71 @@
                     <!-- Product Details Left -->
                     <div class="product-details-left">
                         @php
-                            $img = $product->cover_img ?? null;
-                            if ($img) {
-                                if (\Illuminate\Support\Str::startsWith($img, ['http://','https://'])) {
-                                    $imgUrl = $img;
-                                } elseif (\Illuminate\Support\Str::startsWith($img, ['/', 'images/', 'img/', 'storage/', 'uploads/'])) {
-                                    $imgUrl = asset(ltrim($img, '/'));
-                                } else {
-                                    $imgUrl = asset('storage/' . ltrim($img, '/'));
-                                }
-                            } else {
-                                $imgUrl = asset('images/product/large-size/1.jpg');
+                            /* ── Construcción del array de imágenes de la galería ────────
+                             * Se combina cover_img (portada) con el campo images (adicionales).
+                             * Voyager guarda multiple_images como JSON de objetos con clave
+                             * "download_link" o directamente como array de strings.
+                             * Se normaliza todo a URLs absolutas con asset() / storage/.
+                             * ─────────────────────────────────────────────────────────── */
+                            $allImages = [];
+
+                            // Helper para convertir path relativo → URL absoluta
+                            $toUrl = function($path) {
+                                if (!$path) return null;
+                                if (\Illuminate\Support\Str::startsWith($path, ['http://','https://'])) return $path;
+                                if (\Illuminate\Support\Str::startsWith($path, ['/', 'images/', 'img/'])) return asset(ltrim($path, '/'));
+                                return asset('storage/' . ltrim($path, '/'));
+                            };
+
+                            // 1. Portada principal
+                            if ($product->cover_img) {
+                                $allImages[] = $toUrl($product->cover_img);
                             }
+
+                            // 2. Imágenes adicionales (campo images — JSON de Voyager)
+                            $extraImages = $product->images ?? [];
+                            if (is_string($extraImages)) {
+                                $extraImages = json_decode($extraImages, true) ?? [];
+                            }
+                            foreach ($extraImages as $item) {
+                                // Voyager puede guardar objeto con download_link o string directo
+                                $path = is_array($item) ? ($item['download_link'] ?? null) : $item;
+                                if ($path && ($url = $toUrl($path))) {
+                                    $allImages[] = $url;
+                                }
+                            }
+
+                            // Fallback si no hay ninguna imagen
+                            if (empty($allImages)) {
+                                $allImages[] = asset('images/product/large-size/1.jpg');
+                            }
+
+                            // Primera imagen para compatibilidad con código existente
+                            $imgUrl = $allImages[0];
                         @endphp
+
+                        {{-- ── Galería principal — imágenes grandes (slider-navigation-1) ── --}}
                         <div class="product-details-images slider-navigation-1">
+                            @foreach($allImages as $imgItem)
                             <div class="lg-image">
-                                <a class="popup-img venobox vbox-item" href="{{ $imgUrl }}" data-gall="myGallery">
-                                    <img src="{{ $imgUrl }}" alt="{{ $product->nombre ?? 'product image' }}">
+                                {{-- Venobox permite abrir la imagen en lightbox al hacer clic --}}
+                                <a class="popup-img venobox vbox-item"
+                                   href="{{ $imgItem }}"
+                                   data-gall="myGallery">
+                                    <img src="{{ $imgItem }}"
+                                         alt="{{ $product->nombre ?? 'product image' }}">
                                 </a>
                             </div>
+                            @endforeach
                         </div>
+
+                        {{-- ── Miniaturas sincronizadas (slider-thumbs-1) ─────────────── --}}
                         <div class="product-details-thumbs slider-thumbs-1">
-                            <div class="sm-image"><img src="{{ $imgUrl }}" alt="product image thumb"></div>
+                            @foreach($allImages as $imgItem)
+                            <div class="sm-image">
+                                <img src="{{ $imgItem }}" alt="miniatura">
+                            </div>
+                            @endforeach
                         </div>
                     </div>
                     <!--// Product Details Left -->

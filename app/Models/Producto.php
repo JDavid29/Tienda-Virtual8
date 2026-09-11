@@ -16,9 +16,19 @@ class Producto extends Model
         'category_id',
         'nombre',
         'descripcion',
+        'descripcion_larga',
         'precio',
+        'cantidad',
+        'referencia',
         'cover_img',
+        'images',      // JSON: array de rutas de imágenes adicionales
         'shop_id',
+        'proveedor_id',
+    ];
+
+    // Voyager guarda multiple_images como JSON; se convierte a array automáticamente
+    protected $casts = [
+        'images' => 'array',
     ];
 
     public function shop(){
@@ -28,6 +38,12 @@ class Producto extends Model
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    // Un producto pertenece a un proveedor (proveedor_id ya existe en la tabla)
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedore::class, 'proveedor_id');
     }
 
     public function resenas()
